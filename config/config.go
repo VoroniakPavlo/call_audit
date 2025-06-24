@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"flag"
 	"fmt"
-	cerr "call_audit/internal/errors"
+	cerr "github.com/VoroniakPavlo/call_audit/internal/errors"
 	"os"
 )
 

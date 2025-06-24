@@ -1,6 +1,6 @@
 package main
 
-import "github.com/yourusername/call_audit/cmd"
+import "github.com/VoroniakPavlo/call_audit/cmd"
 
 func main() {
 	cmd.Run()

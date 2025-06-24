@@ -6,10 +6,10 @@ import (
 	"os/signal"
 	"syscall"
 
-	conf "call_audit/config"
-	"github.com/webitel/cases/internal/app"
-	logging "github.com/webitel/cases/internal/otel"
-	"github.com/webitel/cases/model"
+	conf "github.com/VoroniakPavlo/call_audit/config"
+	"github.com/VoroniakPavlo/call_audit/internal/app"
+	logging "github.com/VoroniakPavlo/call_audit/internal/otel"
+	"github.com/VoroniakPavlo/call_audit/model"
 
 	// ------------ logging ------------ //
 	"go.opentelemetry.io/otel/sdk/resource"
