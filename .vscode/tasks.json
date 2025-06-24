@@ -1,0 +1,20 @@
+{
+  // See https://code.visualstudio.com/docs/editor/tasks for more details
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Run Go App",
+      "type": "shell",
+      "command": "go run main.go",
+      "group": "build",
+      "problemMatcher": []
+    },
+    {
+      "label": "Build Go App",
+      "type": "shell",
+      "command": "go build",
+      "group": "build",
+      "problemMatcher": []
+    }
+  ]
+}
