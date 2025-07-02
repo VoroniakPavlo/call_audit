@@ -4,7 +4,8 @@ import (
 	"context"
 	"time"
 
-	"github.com/VoroniakPavlo/cases/auth"
+	"github.com/VoroniakPavlo/call_audit/auth"
+
 	"github.com/webitel/webitel-go-kit/etag"
 )
 

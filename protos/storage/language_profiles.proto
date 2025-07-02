@@ -4,6 +4,7 @@ package storage;
 
 option go_package = "github.com/VoroniakPavlo/call_audit/api/storage;storage";
 
+
 import "google/protobuf/timestamp.proto";
 
 // === MODEL ===

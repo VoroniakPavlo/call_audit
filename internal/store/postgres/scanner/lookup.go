@@ -5,7 +5,8 @@ import (
 	"strconv"
 	"strings"
 
-	_go "github.com/VoroniakPavlo/cases/api/cases"
+	_go "github.com/VoroniakPavlo/call_audit/protos/storage"
+
 	"github.com/jackc/pgtype"
 )
 

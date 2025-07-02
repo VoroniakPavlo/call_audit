@@ -18,3 +18,5 @@ plugins:
 
   - local: [ "go", "run", "github.com/webitel/webitel-go-kit/cmd/protoc-gen-go-webitel@v0.0.18" ]
     out: api
+
+

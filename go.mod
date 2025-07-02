@@ -82,3 +82,4 @@ require (
 	go.opentelemetry.io/otel/trace v1.36.0 // indirect 
 	golang.org/x/sys v0.33.0 // indirect
 )
+replace github.com/VoroniakPavlo/call_audit => ./

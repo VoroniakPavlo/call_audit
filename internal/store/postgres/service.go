@@ -4,17 +4,18 @@ import (
 	"fmt"
 	"time"
 
-	util2 "github.com/VoroniakPavlo/cases/internal/store/util"
-	"github.com/VoroniakPavlo/cases/model/options"
+	util2 "github.com/VoroniakPavlo/call_audit/internal/store/util"
+	"github.com/VoroniakPavlo/call_audit/model/options"
 
-	"github.com/VoroniakPavlo/cases/internal/store/postgres/scanner"
+	"github.com/VoroniakPavlo/call_audit/internal/store/postgres/scanner"
+
 	"github.com/jackc/pgtype"
 
+	dberr "github.com/VoroniakPavlo/call_audit/internal/errors"
+	"github.com/VoroniakPavlo/call_audit/internal/store"
+	"github.com/VoroniakPavlo/call_audit/util"
+
 	sq "github.com/Masterminds/squirrel"
-	"github.com/VoroniakPavlo/cases/api/cases"
-	dberr "github.com/VoroniakPavlo/cases/internal/errors"
-	"github.com/VoroniakPavlo/cases/internal/store"
-	"github.com/VoroniakPavlo/cases/util"
 	"github.com/lib/pq"
 )
 

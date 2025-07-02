@@ -18,7 +18,7 @@ import (
 	broker "github.com/VoroniakPavlo/call_audit/rabbit"
 
 	engine "github.com/VoroniakPavlo/call_audit/api/engine"
-	wlogger "github.com/VoroniakPavlo/logger/pkg/client/v2"
+	wlogger "github.com/webitel/logger/pkg/client/v2"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 )

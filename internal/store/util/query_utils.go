@@ -4,8 +4,9 @@ import (
 	"fmt"
 	"strings"
 
+	grpcopts "github.com/VoroniakPavlo/call_audit/model/options/grpc"
+
 	"github.com/Masterminds/squirrel"
-	grpcopts "github.com/VoroniakPavlo/cases/model/options/grpc"
 )
 
 const (

@@ -5,12 +5,13 @@ import (
 	"errors"
 	"time"
 
-	"github.com/VoroniakPavlo/cases/auth"
-	"github.com/VoroniakPavlo/cases/model"
-	"github.com/VoroniakPavlo/cases/model/options"
-	"github.com/VoroniakPavlo/cases/model/options/grpc/shared"
-	util2 "github.com/VoroniakPavlo/cases/model/options/grpc/util"
-	"github.com/VoroniakPavlo/cases/util"
+	"github.com/VoroniakPavlo/call_audit/auth"
+	"github.com/VoroniakPavlo/call_audit/model"
+	"github.com/VoroniakPavlo/call_audit/model/options"
+	"github.com/VoroniakPavlo/call_audit/model/options/grpc/shared"
+	util2 "github.com/VoroniakPavlo/call_audit/model/options/grpc/util"
+	"github.com/VoroniakPavlo/call_audit/util"
+
 	"github.com/webitel/webitel-go-kit/etag"
 )
 

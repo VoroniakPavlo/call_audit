@@ -6,11 +6,12 @@ import (
 	"strings"
 	"time"
 
-	"github.com/VoroniakPavlo/cases/auth"
-	"github.com/VoroniakPavlo/cases/model"
-	"github.com/VoroniakPavlo/cases/model/options/defaults"
-	"github.com/VoroniakPavlo/cases/model/options/grpc/shared"
-	"github.com/VoroniakPavlo/cases/util"
+	"github.com/VoroniakPavlo/call_audit/auth"
+	"github.com/VoroniakPavlo/call_audit/model"
+	"github.com/VoroniakPavlo/call_audit/model/options/defaults"
+	"github.com/VoroniakPavlo/call_audit/model/options/grpc/shared"
+	"github.com/VoroniakPavlo/call_audit/util"
+
 	"github.com/webitel/webitel-go-kit/etag"
 )
 
