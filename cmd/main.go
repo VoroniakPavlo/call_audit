@@ -8,7 +8,6 @@ import (
 
 	conf "github.com/VoroniakPavlo/call_audit/config"
 	"github.com/VoroniakPavlo/call_audit/internal/app"
-	logging "github.com/VoroniakPavlo/call_audit/internal/otel"
 	"github.com/VoroniakPavlo/call_audit/model"
 
 	// ------------ logging ------------ //
@@ -21,7 +20,7 @@ func Run() {
 	// Load configuration
 	config, appErr := conf.LoadConfig()
 	if appErr != nil {
-		slog.Error("cases.main.configuration_error", slog.String("error", appErr.Error()))
+		slog.Error("call_audit.main.configuration_error", slog.String("error", appErr.Error()))
 		return
 	}
 
@@ -37,7 +36,7 @@ func Run() {
 	// Initialize the application
 	application, appErr := app.New(config, shutdown)
 	if appErr != nil {
-		slog.Error("cases.main.application_initialization_error", slog.String("error", appErr.Error()))
+		slog.Error("call_audit.main.application_initialization_error", slog.String("error", appErr.Error()))
 		return
 	}
 

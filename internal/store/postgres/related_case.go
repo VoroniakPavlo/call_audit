@@ -3,16 +3,17 @@ package postgres
 import (
 	"errors"
 	"fmt"
-	util2 "github.com/webitel/cases/internal/store/util"
-	"github.com/webitel/cases/model/options"
+
+	util2 "github.com/VoroniakPavlo/cases/internal/store/util"
+	"github.com/VoroniakPavlo/cases/model/options"
 
 	sq "github.com/Masterminds/squirrel"
+	"github.com/VoroniakPavlo/cases/api/cases"
+	dberr "github.com/VoroniakPavlo/cases/internal/errors"
+	"github.com/VoroniakPavlo/cases/internal/store"
+	"github.com/VoroniakPavlo/cases/internal/store/postgres/scanner"
+	util "github.com/VoroniakPavlo/cases/util"
 	"github.com/jackc/pgx/v5"
-	"github.com/webitel/cases/api/cases"
-	dberr "github.com/webitel/cases/internal/errors"
-	"github.com/webitel/cases/internal/store"
-	"github.com/webitel/cases/internal/store/postgres/scanner"
-	util "github.com/webitel/cases/util"
 )
 
 type RelatedCaseStore struct {

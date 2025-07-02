@@ -93,7 +93,7 @@ func LoadConfig() (*AppConfig, error) { // Change to return standard error
 	}
 
 	if triggerConfig.ExchangeName == "" {
-		value := "cases"
+		value := "call_audit"
 		if env := os.Getenv("TRIGGER_WATCHER_EXCHANGE_NAME"); env != "" {
 			value = env
 		}
@@ -142,7 +142,7 @@ func LoadConfig() (*AppConfig, error) { // Change to return standard error
 
 	// trying to load config from file
 	if appConfig.File == "" {
-		appConfig.File = os.Getenv("CASES_CONFIG_FILE")
+		appConfig.File = os.Getenv("CALL_AUDIT_CONFIG_FILE")
 	}
 
 	if appConfig.File != "" {

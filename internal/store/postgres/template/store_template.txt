@@ -1,10 +1,10 @@
 package postgres
 
 import (
-	"github.com/webitel/cases/api/cases"
-	dberr "github.com/webitel/cases/internal/error"
-	"github.com/webitel/cases/internal/store"
-	"github.com/webitel/cases/model"
+	"github.com/VoroniakPavlo/cases/api/cases"
+	dberr "github.com/VoroniakPavlo/cases/internal/error"
+	"github.com/VoroniakPavlo/cases/internal/store"
+	"github.com/VoroniakPavlo/cases/model"
 )
 
 type [MAIN_OBJECT]Store struct {

@@ -2,9 +2,10 @@ package util
 
 import (
 	"fmt"
-	"github.com/Masterminds/squirrel"
-	grpcopts "github.com/webitel/cases/model/options/grpc"
 	"strings"
+
+	"github.com/Masterminds/squirrel"
+	grpcopts "github.com/VoroniakPavlo/cases/model/options/grpc"
 )
 
 const (

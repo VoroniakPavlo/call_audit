@@ -4,13 +4,13 @@ import (
 	"context"
 	"log/slog"
 
+	conf "github.com/VoroniakPavlo/cases/config"
+	dberr "github.com/VoroniakPavlo/cases/internal/errors"
+	"github.com/VoroniakPavlo/cases/internal/store"
 	"github.com/jackc/pgx/v5/pgxpool"
-	conf "github.com/webitel/cases/config"
-	dberr "github.com/webitel/cases/internal/errors"
-	"github.com/webitel/cases/internal/store"
 	otelpgx "github.com/webitel/webitel-go-kit/tracing/pgx"
 
-	custom "github.com/webitel/custom/store"
+	custom "github.com/VoroniakPavlo/custom/store"
 )
 
 // Store is the struct implementing the Store interface.

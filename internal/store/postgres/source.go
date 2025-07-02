@@ -2,16 +2,17 @@ package postgres
 
 import (
 	"fmt"
-	util2 "github.com/webitel/cases/internal/store/util"
-	"github.com/webitel/cases/model/options"
 	"strings"
 
+	util2 "github.com/VoroniakPavlo/cases/internal/store/util"
+	"github.com/VoroniakPavlo/cases/model/options"
+
 	sq "github.com/Masterminds/squirrel"
-	_go "github.com/webitel/cases/api/cases"
-	dberr "github.com/webitel/cases/internal/errors"
-	"github.com/webitel/cases/internal/store"
-	"github.com/webitel/cases/internal/store/postgres/scanner"
-	"github.com/webitel/cases/util"
+	_go "github.com/VoroniakPavlo/cases/api/cases"
+	dberr "github.com/VoroniakPavlo/cases/internal/errors"
+	"github.com/VoroniakPavlo/cases/internal/store"
+	"github.com/VoroniakPavlo/cases/internal/store/postgres/scanner"
+	"github.com/VoroniakPavlo/cases/util"
 )
 
 const (

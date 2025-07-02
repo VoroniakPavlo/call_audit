@@ -3,16 +3,17 @@ package postgres
 import (
 	"errors"
 	"fmt"
-	"github.com/webitel/cases/internal/store/util"
-	"github.com/webitel/cases/model/options"
-	"github.com/webitel/cases/model/options/defaults"
 	"strconv"
 
+	"github.com/VoroniakPavlo/cases/internal/store/util"
+	"github.com/VoroniakPavlo/cases/model/options"
+	"github.com/VoroniakPavlo/cases/model/options/defaults"
+
 	sq "github.com/Masterminds/squirrel"
-	"github.com/webitel/cases/api/cases"
-	dberr "github.com/webitel/cases/internal/errors"
-	"github.com/webitel/cases/internal/store"
-	"github.com/webitel/cases/internal/store/postgres/scanner"
+	"github.com/VoroniakPavlo/cases/api/cases"
+	dberr "github.com/VoroniakPavlo/cases/internal/errors"
+	"github.com/VoroniakPavlo/cases/internal/store"
+	"github.com/VoroniakPavlo/cases/internal/store/postgres/scanner"
 )
 
 type CaseFileStore struct {

@@ -3,19 +3,20 @@ package postgres
 import (
 	"encoding/json"
 	"fmt"
-	util2 "github.com/webitel/cases/internal/store/util"
-	"github.com/webitel/cases/model/options"
 	"strings"
 	"time"
 
-	sq "github.com/Masterminds/squirrel"
-	"github.com/lib/pq"
-	"github.com/webitel/cases/api/cases"
-	dberr "github.com/webitel/cases/internal/errors"
-	"github.com/webitel/cases/internal/store"
-	"github.com/webitel/cases/internal/store/postgres/transaction"
+	util2 "github.com/VoroniakPavlo/cases/internal/store/util"
+	"github.com/VoroniakPavlo/cases/model/options"
 
-	"github.com/webitel/cases/util"
+	sq "github.com/Masterminds/squirrel"
+	"github.com/VoroniakPavlo/cases/api/cases"
+	dberr "github.com/VoroniakPavlo/cases/internal/errors"
+	"github.com/VoroniakPavlo/cases/internal/store"
+	"github.com/VoroniakPavlo/cases/internal/store/postgres/transaction"
+	"github.com/lib/pq"
+
+	"github.com/VoroniakPavlo/cases/util"
 )
 
 type CatalogStore struct {

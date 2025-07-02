@@ -2,18 +2,19 @@ package postgres
 
 import (
 	"fmt"
-	"github.com/webitel/cases/internal/store/postgres/transaction"
-	"github.com/webitel/cases/internal/store/util"
-	"github.com/webitel/cases/model/options"
+
+	"github.com/VoroniakPavlo/cases/internal/store/postgres/transaction"
+	"github.com/VoroniakPavlo/cases/internal/store/util"
+	"github.com/VoroniakPavlo/cases/model/options"
 
 	"github.com/Masterminds/squirrel"
+	"github.com/VoroniakPavlo/cases/api/cases"
+	"github.com/VoroniakPavlo/cases/auth"
+	dberr "github.com/VoroniakPavlo/cases/internal/errors"
+	"github.com/VoroniakPavlo/cases/internal/store"
+	"github.com/VoroniakPavlo/cases/internal/store/postgres/scanner"
+	"github.com/VoroniakPavlo/cases/model"
 	"github.com/jackc/pgx/v5"
-	"github.com/webitel/cases/api/cases"
-	"github.com/webitel/cases/auth"
-	dberr "github.com/webitel/cases/internal/errors"
-	"github.com/webitel/cases/internal/store"
-	"github.com/webitel/cases/internal/store/postgres/scanner"
-	"github.com/webitel/cases/model"
 )
 
 type CaseCommunicationStore struct {

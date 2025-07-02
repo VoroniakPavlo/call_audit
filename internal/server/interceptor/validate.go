@@ -6,11 +6,11 @@ import (
 	"context"
 	"errors"
 
-	"github.com/bufbuild/protovalidate-go" // Make sure protovalidate is in your dependencies
+	"buf.build/go/protovalidate" // Make sure protovalidate is in your dependencies
 	"google.golang.org/grpc"
 	"google.golang.org/protobuf/proto" // Required for proto.Message type assertion
 
-	cerr "github.com/webitel/cases/internal/errors"
+	cerr "github.com/VoroniakPavlo/call_audit/internal/errors"
 )
 
 // ValidateUnaryServerInterceptor returns a gRPC interceptor for request validation.

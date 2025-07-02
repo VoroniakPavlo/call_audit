@@ -1,0 +1,5 @@
+version: v1
+name: buf.build/VoroniakPavlo/call_audit
+
+deps:
+  - buf.build/bufbuild/protovalidate

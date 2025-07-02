@@ -4,21 +4,22 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"github.com/webitel/cases/auth"
-	util2 "github.com/webitel/cases/internal/store/util"
-	"github.com/webitel/cases/model/options"
-	"github.com/webitel/cases/model/options/defaults"
 
+	"github.com/VoroniakPavlo/cases/auth"
+	util2 "github.com/VoroniakPavlo/cases/internal/store/util"
+	"github.com/VoroniakPavlo/cases/model/options"
+	"github.com/VoroniakPavlo/cases/model/options/defaults"
+
+	_go "github.com/VoroniakPavlo/cases/api/cases"
 	"github.com/jackc/pgx"
-	_go "github.com/webitel/cases/api/cases"
 
 	sq "github.com/Masterminds/squirrel"
+	dberr "github.com/VoroniakPavlo/cases/internal/errors"
+	"github.com/VoroniakPavlo/cases/internal/store"
+	"github.com/VoroniakPavlo/cases/internal/store/postgres/scanner"
+	"github.com/VoroniakPavlo/cases/model"
+	"github.com/VoroniakPavlo/cases/util"
 	"github.com/lib/pq"
-	dberr "github.com/webitel/cases/internal/errors"
-	"github.com/webitel/cases/internal/store"
-	"github.com/webitel/cases/internal/store/postgres/scanner"
-	"github.com/webitel/cases/model"
-	"github.com/webitel/cases/util"
 )
 
 type CaseCommentStore struct {

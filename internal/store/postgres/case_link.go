@@ -3,17 +3,18 @@ package postgres
 import (
 	"errors"
 	"fmt"
-	"github.com/Masterminds/squirrel"
-	"github.com/jackc/pgx/v5"
-	_go "github.com/webitel/cases/api/cases"
-	dberr "github.com/webitel/cases/internal/errors"
-	"github.com/webitel/cases/internal/store"
-	"github.com/webitel/cases/internal/store/postgres/scanner"
-	dbutil "github.com/webitel/cases/internal/store/util"
-	"github.com/webitel/cases/model/options"
-	"github.com/webitel/cases/model/options/defaults"
-	"github.com/webitel/cases/util"
 	"net/url"
+
+	"github.com/Masterminds/squirrel"
+	_go "github.com/VoroniakPavlo/cases/api/cases"
+	dberr "github.com/VoroniakPavlo/cases/internal/errors"
+	"github.com/VoroniakPavlo/cases/internal/store"
+	"github.com/VoroniakPavlo/cases/internal/store/postgres/scanner"
+	dbutil "github.com/VoroniakPavlo/cases/internal/store/util"
+	"github.com/VoroniakPavlo/cases/model/options"
+	"github.com/VoroniakPavlo/cases/model/options/defaults"
+	"github.com/VoroniakPavlo/cases/util"
+	"github.com/jackc/pgx/v5"
 )
 
 const (

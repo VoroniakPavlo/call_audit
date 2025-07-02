@@ -2,16 +2,17 @@ package postgres
 
 import (
 	"fmt"
-	"github.com/webitel/cases/internal/store/util"
-	"github.com/webitel/cases/model/options"
+
+	"github.com/VoroniakPavlo/cases/internal/store/util"
+	"github.com/VoroniakPavlo/cases/model/options"
 
 	"github.com/Masterminds/squirrel"
+	"github.com/VoroniakPavlo/cases/api/cases"
+	dberr "github.com/VoroniakPavlo/cases/internal/errors"
+	"github.com/VoroniakPavlo/cases/internal/store"
+	"github.com/VoroniakPavlo/cases/internal/store/postgres/scanner"
+	"github.com/VoroniakPavlo/cases/model"
 	"github.com/jackc/pgtype"
-	"github.com/webitel/cases/api/cases"
-	dberr "github.com/webitel/cases/internal/errors"
-	"github.com/webitel/cases/internal/store"
-	"github.com/webitel/cases/internal/store/postgres/scanner"
-	"github.com/webitel/cases/model"
 )
 
 var CaseTimelineFields = []string{

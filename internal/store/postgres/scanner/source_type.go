@@ -4,7 +4,7 @@ import (
 	"errors"
 	"strings"
 
-	_go "github.com/webitel/cases/api/cases"
+	_go "github.com/VoroniakPavlo/cases/api/cases"
 )
 
 // SourceTypeScanner is a custom scanner for converting a text-based enum to _go.SourceType

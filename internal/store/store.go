@@ -3,15 +3,15 @@ package store
 import (
 	"context"
 
-	"github.com/webitel/cases/model/options"
+	"github.com/VoroniakPavlo/cases/model/options"
 
-	"github.com/webitel/cases/auth"
+	"github.com/VoroniakPavlo/cases/auth"
 
-	_go "github.com/webitel/cases/api/cases"
-	dberr "github.com/webitel/cases/internal/errors"
-	"github.com/webitel/cases/model"
+	_go "github.com/VoroniakPavlo/cases/api/cases"
+	dberr "github.com/VoroniakPavlo/cases/internal/errors"
+	"github.com/VoroniakPavlo/cases/model"
 
-	custom "github.com/webitel/custom/store"
+	custom "github.com/VoroniakPavlo/custom/store"
 )
 
 // Store is an interface that defines all the methods and properties that a store should implement in Cases service

@@ -5,11 +5,11 @@ import (
 	"fmt"
 	"log/slog"
 
-	"github.com/webitel/cases/auth"
-	customrel "github.com/webitel/custom/reflect"
-	customreg "github.com/webitel/custom/registry"
-	cstore "github.com/webitel/custom/store"
-	custompgx "github.com/webitel/custom/store/postgres"
+	"github.com/VoroniakPavlo/cases/auth"
+	customrel "github.com/VoroniakPavlo/custom/reflect"
+	customreg "github.com/VoroniakPavlo/custom/registry"
+	cstore "github.com/VoroniakPavlo/custom/store"
+	custompgx "github.com/VoroniakPavlo/custom/store/postgres"
 )
 
 func (s *Store) Custom() cstore.Catalog {

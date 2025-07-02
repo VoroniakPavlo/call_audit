@@ -5,8 +5,8 @@ import (
 	"strconv"
 	"strings"
 
+	_go "github.com/VoroniakPavlo/cases/api/cases"
 	"github.com/jackc/pgtype"
-	_go "github.com/webitel/cases/api/cases"
 )
 
 type ScanFunc func(src any) error

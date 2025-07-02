@@ -6,25 +6,19 @@ import (
 	"log/slog"
 	"strings"
 
-	ftspublisher "github.com/webitel/cases/fts_client"
-	ftsclient "github.com/webitel/webitel-go-kit/fts_client"
-
-	webitelgo "github.com/webitel/cases/api/webitel-go/contacts"
-	"github.com/webitel/cases/auth"
-	"github.com/webitel/cases/auth/user_auth"
-	"github.com/webitel/cases/auth/user_auth/webitel_manager"
-	"github.com/webitel/cases/internal/errors"
+	"github.com/VoroniakPavlo/call_audit/auth"
+	"github.com/VoroniakPavlo/call_audit/internal/errors"
 	"google.golang.org/grpc/metadata"
 
-	conf "github.com/webitel/cases/config"
-	cerror "github.com/webitel/cases/internal/errors"
-	"github.com/webitel/cases/internal/server"
-	"github.com/webitel/cases/internal/store"
-	"github.com/webitel/cases/internal/store/postgres"
-	broker "github.com/webitel/cases/rabbit"
+	conf "github.com/VoroniakPavlo/call_audit/config"
+	cerror "github.com/VoroniakPavlo/call_audit/internal/errors"
+	"github.com/VoroniakPavlo/call_audit/internal/server"
+	"github.com/VoroniakPavlo/call_audit/internal/store"
+	"github.com/VoroniakPavlo/call_audit/internal/store/postgres"
+	broker "github.com/VoroniakPavlo/call_audit/rabbit"
 
-	engine "github.com/webitel/cases/api/engine"
-	wlogger "github.com/webitel/logger/pkg/client/v2"
+	engine "github.com/VoroniakPavlo/call_audit/api/engine"
+	wlogger "github.com/VoroniakPavlo/logger/pkg/client/v2"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 )
@@ -70,8 +64,6 @@ type App struct {
 	engineConn        *grpc.ClientConn
 	engineAgentClient engine.AgentServiceClient
 	wtelLogger        *wlogger.LoggerClient
-	ftsClient         *ftsclient.Client
-	watcherManager    WatcherManager
 }
 
 func New(config *conf.AppConfig, shutdown func(ctx context.Context) error) (*App, error) {
@@ -100,8 +92,7 @@ func New(config *conf.AppConfig, shutdown func(ctx context.Context) error) (*App
 	}
 
 	// register watchers
-	watcherManager := NewDefaultWatcherManager(config.WatchersEnabled)
-	app.watcherManager = watcherManager
+
 	//
 
 	// --------- Webitel App gRPC Connection ---------
