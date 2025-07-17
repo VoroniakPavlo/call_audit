@@ -28,6 +28,67 @@ type HttpBinding struct {
 }
 
 var WebitelAPI = WebitelServicesInfo{
+	"CallQuestionnaireRuleService": WebitelServices{
+		ObjClass:           "",
+		AdditionalLicenses: []string{},
+		WebitelMethods: map[string]WebitelMethod{
+			"Get": WebitelMethod{
+				Access: 0,
+				Input:  "GetCallQuestionnaireRuleRequest",
+				Output: "CallQuestionnaireRule",
+				HttpBindings: []*HttpBinding{
+					{
+						Path:   "",
+						Method: "",
+					},
+				},
+			},
+			"List": WebitelMethod{
+				Access: 0,
+				Input:  "Empty",
+				Output: "CallQuestionnaireRuleList",
+				HttpBindings: []*HttpBinding{
+					{
+						Path:   "",
+						Method: "",
+					},
+				},
+			},
+			"Create": WebitelMethod{
+				Access: 0,
+				Input:  "UpsertCallQuestionnaireRuleRequest",
+				Output: "CallQuestionnaireRule",
+				HttpBindings: []*HttpBinding{
+					{
+						Path:   "",
+						Method: "",
+					},
+				},
+			},
+			"Update": WebitelMethod{
+				Access: 0,
+				Input:  "UpsertCallQuestionnaireRuleRequest",
+				Output: "CallQuestionnaireRule",
+				HttpBindings: []*HttpBinding{
+					{
+						Path:   "",
+						Method: "",
+					},
+				},
+			},
+			"Delete": WebitelMethod{
+				Access: 0,
+				Input:  "DeleteCallQuestionnaireRuleRequest",
+				Output: "Empty",
+				HttpBindings: []*HttpBinding{
+					{
+						Path:   "",
+						Method: "",
+					},
+				},
+			},
+		},
+	},
 	"LanguageProfileService": WebitelServices{
 		ObjClass:           "",
 		AdditionalLicenses: []string{},

@@ -1,17 +1,14 @@
 package server
 
 import (
-	"fmt"
 	"net"
 
-	"github.com/VoroniakPavlo/call_audit/auth/user_auth"
-
+	"github.com/VoroniakPavlo/call_audit/auth"
 	conf "github.com/VoroniakPavlo/call_audit/config"
 	grpcerr "github.com/VoroniakPavlo/call_audit/internal/errors"
 	"github.com/VoroniakPavlo/call_audit/internal/server/interceptor"
 	"github.com/VoroniakPavlo/call_audit/registry"
 	"github.com/VoroniakPavlo/call_audit/registry/consul"
-	"buf.build/go/protovalidate"
 	otelgrpc "github.com/webitel/webitel-go-kit/tracing/grpc"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
@@ -25,15 +22,10 @@ type Server struct {
 	registry registry.ServiceRegistrator
 }
 
-// BuildServer constructs and configures a new gRPC server with interceptors.
-func BuildServer(config *conf.ConsulConfig, authManager user_auth.AuthManager, exitChan chan error) (*Server, error) {
-	// Initialize protovalidate validator
-	val, err := protovalidate.New(protovalidate.WithFailFast(true))
-	if err != nil {
-		return nil, fmt.Errorf("failed to initialize protovalidate: %w", err)
-	}
+// BuildServer constructs and configures a new gRPC server
+func BuildServer(config *conf.ConsulConfig, authManager auth.Manager, exitChan chan error) (*Server, error) {
 
-	// Create a new gRPC server with interceptors and tracing
+	// Create a new gRPC server
 	s := grpc.NewServer(
 		grpc.StatsHandler(otelgrpc.NewServerHandler(
 			otelgrpc.WithMessageEvents(otelgrpc.SentEvents, otelgrpc.ReceivedEvents),
@@ -41,7 +33,6 @@ func BuildServer(config *conf.ConsulConfig, authManager user_auth.AuthManager, e
 		grpc.ChainUnaryInterceptor(
 			interceptor.OuterInterceptor(),
 			interceptor.AuthUnaryServerInterceptor(authManager),
-			interceptor.ValidateUnaryServerInterceptor(val),
 		),
 	)
 

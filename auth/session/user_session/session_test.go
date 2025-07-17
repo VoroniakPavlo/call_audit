@@ -1,9 +1,10 @@
-package user_auth
+package user_session
 
 import (
-	"github.com/VoroniakPavlo/call_audit/auth"
 	"reflect"
 	"testing"
+
+	"github.com/VoroniakPavlo/call_audit/auth"
 )
 
 func TestUserAuthSession_CheckLicenseAccess(t *testing.T) {
@@ -32,7 +33,7 @@ func TestUserAuthSession_CheckLicenseAccess(t *testing.T) {
 		want   bool
 	}{
 		{
-			name: "Active license",
+			name: "Active License",
 			args: args{name: "CALL_CENTER"},
 			fields: fields{
 				license: map[string]bool{
@@ -48,7 +49,7 @@ func TestUserAuthSession_CheckLicenseAccess(t *testing.T) {
 			want: true,
 		},
 		{
-			name: "Expired license but present in map",
+			name: "Expired License but present in map",
 			args: args{name: "CALL_MANAGER"},
 			fields: fields{
 				license: map[string]bool{
@@ -64,7 +65,7 @@ func TestUserAuthSession_CheckLicenseAccess(t *testing.T) {
 			want: false,
 		},
 		{
-			name: "Not present in license",
+			name: "Not present in License",
 			args: args{name: "EXPIRED_LICENSE"},
 			fields: fields{
 				license: map[string]bool{
@@ -95,7 +96,7 @@ func TestUserAuthSession_CheckLicenseAccess(t *testing.T) {
 			},
 		},
 		{
-			name: "Not present license but user has super rights",
+			name: "Not present License but user has super rights",
 			args: args{name: "UNKNOWN_LICENSE"},
 			fields: fields{
 				license: map[string]bool{
@@ -115,7 +116,7 @@ func TestUserAuthSession_CheckLicenseAccess(t *testing.T) {
 			want: false,
 		},
 		{
-			name: "Present expired license and user has super rights",
+			name: "Present expired License and user has super rights",
 			args: args{name: "CALL_MANAGER"},
 			fields: fields{
 				license: map[string]bool{
@@ -138,19 +139,19 @@ func TestUserAuthSession_CheckLicenseAccess(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			s := &UserAuthSession{
-				user:             tt.fields.user,
-				permissions:      tt.fields.permissions,
-				scopes:           tt.fields.scopes,
-				license:          tt.fields.license,
-				roles:            tt.fields.roles,
-				domainId:         tt.fields.domainId,
-				expiresAt:        tt.fields.expiresAt,
-				superCreate:      tt.fields.superCreate,
-				superEdit:        tt.fields.superEdit,
-				superDelete:      tt.fields.superDelete,
-				superSelect:      tt.fields.superSelect,
-				mainAccess:       tt.fields.mainAccess,
-				mainObjClassName: tt.fields.mainObjClassName,
+				User:             tt.fields.user,
+				Permissions:      tt.fields.permissions,
+				Scopes:           tt.fields.scopes,
+				License:          tt.fields.license,
+				Roles:            tt.fields.roles,
+				DomainId:         tt.fields.domainId,
+				ExpiresAt:        tt.fields.expiresAt,
+				SuperCreate:      tt.fields.superCreate,
+				SuperEdit:        tt.fields.superEdit,
+				SuperDelete:      tt.fields.superDelete,
+				SuperSelect:      tt.fields.superSelect,
+				MainAccess:       tt.fields.mainAccess,
+				MainObjClassName: tt.fields.mainObjClassName,
 			}
 			if got := s.CheckLicenseAccess(tt.args.name); got != tt.want {
 				t.Errorf("CheckLicenseAccess() = %v, want %v", got, tt.want)
@@ -307,7 +308,7 @@ func TestUserAuthSession_CheckObacAccess(t *testing.T) {
 			},
 			want: true,
 		},
-		// super permissions
+		// super Permissions
 		{
 			name: "Existing scope with enabled obac and name without read access but with super read",
 			args: args{scopeName: "chats", accessType: auth.Read},
@@ -352,7 +353,7 @@ func TestUserAuthSession_CheckObacAccess(t *testing.T) {
 			},
 			want: true,
 		},
-		// super permissions that not match required permission
+		// super Permissions that not match required permission
 		{
 			name: "Existing scope with enabled obac and name without read access but with super read",
 			args: args{scopeName: "chats", accessType: auth.Read},
@@ -414,7 +415,7 @@ func TestUserAuthSession_CheckObacAccess(t *testing.T) {
 			want: false,
 		},
 		{
-			name: "Non-Existing scope with all super permissions",
+			name: "Non-Existing scope with all super Permissions",
 			args: args{scopeName: "chats", accessType: auth.Add},
 			fields: fields{
 				scopes:      make(map[string]*Scope),
@@ -429,19 +430,19 @@ func TestUserAuthSession_CheckObacAccess(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			s := &UserAuthSession{
-				user:             tt.fields.user,
-				permissions:      tt.fields.permissions,
-				scopes:           tt.fields.scopes,
-				license:          tt.fields.license,
-				roles:            tt.fields.roles,
-				domainId:         tt.fields.domainId,
-				expiresAt:        tt.fields.expiresAt,
-				superCreate:      tt.fields.superCreate,
-				superEdit:        tt.fields.superEdit,
-				superDelete:      tt.fields.superDelete,
-				superSelect:      tt.fields.superSelect,
-				mainAccess:       tt.fields.mainAccess,
-				mainObjClassName: tt.fields.mainObjClassName,
+				User:             tt.fields.user,
+				Permissions:      tt.fields.permissions,
+				Scopes:           tt.fields.scopes,
+				License:          tt.fields.license,
+				Roles:            tt.fields.roles,
+				DomainId:         tt.fields.domainId,
+				ExpiresAt:        tt.fields.expiresAt,
+				SuperCreate:      tt.fields.superCreate,
+				SuperEdit:        tt.fields.superEdit,
+				SuperDelete:      tt.fields.superDelete,
+				SuperSelect:      tt.fields.superSelect,
+				MainAccess:       tt.fields.mainAccess,
+				MainObjClassName: tt.fields.mainObjClassName,
 			}
 			if got := s.CheckObacAccess(tt.args.scopeName, tt.args.accessType); got != tt.want {
 				t.Errorf("CheckObacAccess() = %v, want %v", got, tt.want)
@@ -474,19 +475,19 @@ func TestUserAuthSession_GetDomainId(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			s := &UserAuthSession{
-				user:             tt.fields.user,
-				permissions:      tt.fields.permissions,
-				scopes:           tt.fields.scopes,
-				license:          tt.fields.license,
-				roles:            tt.fields.roles,
-				domainId:         tt.fields.domainId,
-				expiresAt:        tt.fields.expiresAt,
-				superCreate:      tt.fields.superCreate,
-				superEdit:        tt.fields.superEdit,
-				superDelete:      tt.fields.superDelete,
-				superSelect:      tt.fields.superSelect,
-				mainAccess:       tt.fields.mainAccess,
-				mainObjClassName: tt.fields.mainObjClassName,
+				User:             tt.fields.user,
+				Permissions:      tt.fields.permissions,
+				Scopes:           tt.fields.scopes,
+				License:          tt.fields.license,
+				Roles:            tt.fields.roles,
+				DomainId:         tt.fields.domainId,
+				ExpiresAt:        tt.fields.expiresAt,
+				SuperCreate:      tt.fields.superCreate,
+				SuperEdit:        tt.fields.superEdit,
+				SuperDelete:      tt.fields.superDelete,
+				SuperSelect:      tt.fields.superSelect,
+				MainAccess:       tt.fields.mainAccess,
+				MainObjClassName: tt.fields.mainObjClassName,
 			}
 			if got := s.GetDomainId(); got != tt.want {
 				t.Errorf("GetDomainId() = %v, want %v", got, tt.want)
@@ -521,19 +522,19 @@ func TestUserAuthSession_GetRoles(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			s := &UserAuthSession{
-				user:             tt.fields.user,
-				permissions:      tt.fields.permissions,
-				scopes:           tt.fields.scopes,
-				license:          tt.fields.license,
-				roles:            tt.fields.roles,
-				domainId:         tt.fields.domainId,
-				expiresAt:        tt.fields.expiresAt,
-				superCreate:      tt.fields.superCreate,
-				superEdit:        tt.fields.superEdit,
-				superDelete:      tt.fields.superDelete,
-				superSelect:      tt.fields.superSelect,
-				mainAccess:       tt.fields.mainAccess,
-				mainObjClassName: tt.fields.mainObjClassName,
+				User:             tt.fields.user,
+				Permissions:      tt.fields.permissions,
+				Scopes:           tt.fields.scopes,
+				License:          tt.fields.license,
+				Roles:            tt.fields.roles,
+				DomainId:         tt.fields.domainId,
+				ExpiresAt:        tt.fields.expiresAt,
+				SuperCreate:      tt.fields.superCreate,
+				SuperEdit:        tt.fields.superEdit,
+				SuperDelete:      tt.fields.superDelete,
+				SuperSelect:      tt.fields.superSelect,
+				MainAccess:       tt.fields.mainAccess,
+				MainObjClassName: tt.fields.mainObjClassName,
 			}
 			if got := s.GetRoles(); !reflect.DeepEqual(got, tt.want) {
 				t.Errorf("GetRoles() = %v, want %v", got, tt.want)
@@ -593,19 +594,19 @@ func TestUserAuthSession_GetUserId(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			s := &UserAuthSession{
-				user:             tt.fields.user,
-				permissions:      tt.fields.permissions,
-				scopes:           tt.fields.scopes,
-				license:          tt.fields.license,
-				roles:            tt.fields.roles,
-				domainId:         tt.fields.domainId,
-				expiresAt:        tt.fields.expiresAt,
-				superCreate:      tt.fields.superCreate,
-				superEdit:        tt.fields.superEdit,
-				superDelete:      tt.fields.superDelete,
-				superSelect:      tt.fields.superSelect,
-				mainAccess:       tt.fields.mainAccess,
-				mainObjClassName: tt.fields.mainObjClassName,
+				User:             tt.fields.user,
+				Permissions:      tt.fields.permissions,
+				Scopes:           tt.fields.scopes,
+				License:          tt.fields.license,
+				Roles:            tt.fields.roles,
+				DomainId:         tt.fields.domainId,
+				ExpiresAt:        tt.fields.expiresAt,
+				SuperCreate:      tt.fields.superCreate,
+				SuperEdit:        tt.fields.superEdit,
+				SuperDelete:      tt.fields.superDelete,
+				SuperSelect:      tt.fields.superSelect,
+				MainAccess:       tt.fields.mainAccess,
+				MainObjClassName: tt.fields.mainObjClassName,
 			}
 			if got := s.GetUserId(); got != tt.want {
 				t.Errorf("GetUserId() = %v, want %v", got, tt.want)
@@ -640,19 +641,19 @@ func TestUserAuthSession_IsExpired(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			s := &UserAuthSession{
-				user:             tt.fields.user,
-				permissions:      tt.fields.permissions,
-				scopes:           tt.fields.scopes,
-				license:          tt.fields.license,
-				roles:            tt.fields.roles,
-				domainId:         tt.fields.domainId,
-				expiresAt:        tt.fields.expiresAt,
-				superCreate:      tt.fields.superCreate,
-				superEdit:        tt.fields.superEdit,
-				superDelete:      tt.fields.superDelete,
-				superSelect:      tt.fields.superSelect,
-				mainAccess:       tt.fields.mainAccess,
-				mainObjClassName: tt.fields.mainObjClassName,
+				User:             tt.fields.user,
+				Permissions:      tt.fields.permissions,
+				Scopes:           tt.fields.scopes,
+				License:          tt.fields.license,
+				Roles:            tt.fields.roles,
+				DomainId:         tt.fields.domainId,
+				ExpiresAt:        tt.fields.expiresAt,
+				SuperCreate:      tt.fields.superCreate,
+				SuperEdit:        tt.fields.superEdit,
+				SuperDelete:      tt.fields.superDelete,
+				SuperSelect:      tt.fields.superSelect,
+				MainAccess:       tt.fields.mainAccess,
+				MainObjClassName: tt.fields.mainObjClassName,
 			}
 			if got := s.IsExpired(); got != tt.want {
 				t.Errorf("IsExpired() = %v, want %v", got, tt.want)
@@ -814,19 +815,19 @@ func TestUserAuthSession_IsRbacCheckRequired(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			s := &UserAuthSession{
-				user:             tt.fields.user,
-				permissions:      tt.fields.permissions,
-				scopes:           tt.fields.scopes,
-				license:          tt.fields.license,
-				roles:            tt.fields.roles,
-				domainId:         tt.fields.domainId,
-				expiresAt:        tt.fields.expiresAt,
-				superCreate:      tt.fields.superCreate,
-				superEdit:        tt.fields.superEdit,
-				superDelete:      tt.fields.superDelete,
-				superSelect:      tt.fields.superSelect,
-				mainAccess:       tt.fields.mainAccess,
-				mainObjClassName: tt.fields.mainObjClassName,
+				User:             tt.fields.user,
+				Permissions:      tt.fields.permissions,
+				Scopes:           tt.fields.scopes,
+				License:          tt.fields.license,
+				Roles:            tt.fields.roles,
+				DomainId:         tt.fields.domainId,
+				ExpiresAt:        tt.fields.expiresAt,
+				SuperCreate:      tt.fields.superCreate,
+				SuperEdit:        tt.fields.superEdit,
+				SuperDelete:      tt.fields.superDelete,
+				SuperSelect:      tt.fields.superSelect,
+				MainAccess:       tt.fields.mainAccess,
+				MainObjClassName: tt.fields.mainObjClassName,
 			}
 			if got := s.IsRbacCheckRequired(tt.args.scopeName, tt.args.accessType); got != tt.want {
 				t.Errorf("IsRbacCheckRequired() = %v, want %v", got, tt.want)

@@ -12,7 +12,6 @@ import (
 	"go.opentelemetry.io/otel/trace"
 
 	api "github.com/VoroniakPavlo/call_audit/api/protos/storage"
-	"github.com/VoroniakPavlo/call_audit/auth/user_auth"
 	cerror "github.com/VoroniakPavlo/call_audit/internal/errors"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
@@ -30,7 +29,7 @@ const (
 var reg = regexp.MustCompile(`^(.*\.)`)
 
 // AuthUnaryServerInterceptor authenticates and authorizes unary RPCs.
-func AuthUnaryServerInterceptor(authManager user_auth.AuthManager) grpc.UnaryServerInterceptor {
+func AuthUnaryServerInterceptor(authManager auth.Manager) grpc.UnaryServerInterceptor {
 	return func(ctx context.Context, req any, info *grpc.UnaryServerInfo, handler grpc.UnaryHandler) (interface{}, error) {
 		// Retrieve authorization details
 		objClass, licenses, action := objClassWithAction(info)

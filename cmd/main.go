@@ -8,11 +8,7 @@ import (
 
 	conf "github.com/VoroniakPavlo/call_audit/config"
 	"github.com/VoroniakPavlo/call_audit/internal/app"
-	"github.com/VoroniakPavlo/call_audit/model"
-
-	// ------------ logging ------------ //
-	"go.opentelemetry.io/otel/sdk/resource"
-	semconv "go.opentelemetry.io/otel/semconv/v1.26.0"
+	
 )
 
 func Run() {
@@ -24,17 +20,8 @@ func Run() {
 		return
 	}
 
-	// slog + OTEL logging
-	service := resource.NewSchemaless(
-		semconv.ServiceName(model.AppServiceName),
-		semconv.ServiceVersion(model.CurrentVersion),
-		semconv.ServiceInstanceID(config.Consul.Id),
-		semconv.ServiceNamespace(model.NamespaceName),
-	)
-	shutdown := logging.Setup(service)
-
 	// Initialize the application
-	application, appErr := app.New(config, shutdown)
+	application, appErr := app.New(config)
 	if appErr != nil {
 		slog.Error("call_audit.main.application_initialization_error", slog.String("error", appErr.Error()))
 		return

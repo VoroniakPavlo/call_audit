@@ -7,6 +7,7 @@ import (
 	"strings"
 
 	"github.com/VoroniakPavlo/call_audit/auth"
+	"github.com/VoroniakPavlo/call_audit/auth/manager/webitel_app"
 	"github.com/VoroniakPavlo/call_audit/internal/errors"
 	"google.golang.org/grpc/metadata"
 
@@ -15,10 +16,8 @@ import (
 	"github.com/VoroniakPavlo/call_audit/internal/server"
 	"github.com/VoroniakPavlo/call_audit/internal/store"
 	"github.com/VoroniakPavlo/call_audit/internal/store/postgres"
-	broker "github.com/VoroniakPavlo/call_audit/rabbit"
 
 	engine "github.com/VoroniakPavlo/call_audit/api/engine"
-	wlogger "github.com/webitel/logger/pkg/client/v2"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 )
@@ -54,21 +53,18 @@ type App struct {
 	server            *server.Server
 	exitChan          chan error
 	storageConn       *grpc.ClientConn
-	sessionManager    user_auth.AuthManager
+	sessionManager    auth.Manager
 	webitelAppConn    *grpc.ClientConn
 	shutdown          func(ctx context.Context) error
 	log               *slog.Logger
-	rabbit            *broker.RabbitBroker
 	rabbitExitChan    chan cerror.AppError
-	webitelgoClient   webitelgo.GroupsClient
 	engineConn        *grpc.ClientConn
 	engineAgentClient engine.AgentServiceClient
-	wtelLogger        *wlogger.LoggerClient
 }
 
-func New(config *conf.AppConfig, shutdown func(ctx context.Context) error) (*App, error) {
+func New(config *conf.AppConfig) (*App, error) {
 	// --------- App Initialization ---------
-	app := &App{config: config, shutdown: shutdown}
+	app := &App{config: config}
 	var err error
 
 	// --------- DB Initialization ---------
@@ -77,30 +73,11 @@ func New(config *conf.AppConfig, shutdown func(ctx context.Context) error) (*App
 	}
 	app.Store = BuildDatabase(config.Database)
 
-	// --------- Message Broker ( Rabbit ) Initialization ---------
-
-	r, appErr := broker.BuildRabbit(app.config.Rabbit, app.rabbitExitChan)
-	if appErr != nil {
-		return nil, appErr
-	}
-	app.rabbit = r
-
-	// Start the Rabbit connection and consumers
-	appErr = app.rabbit.Start()
-	if appErr != nil {
-		return nil, cerror.NewInternalError("internal.internal.new_app.rabbit.start.error", appErr.Error())
-	}
-
-	// register watchers
-
-	//
-
 	// --------- Webitel App gRPC Connection ---------
 	app.webitelAppConn, err = grpc.NewClient(fmt.Sprintf("consul://%s/go.webitel.app?wait=14s", config.Consul.Address),
 		grpc.WithDefaultServiceConfig(`{"loadBalancingPolicy": "round_robin"}`),
 		grpc.WithTransportCredentials(insecure.NewCredentials()),
 	)
-	app.webitelgoClient = webitelgo.NewGroupsClient(app.webitelAppConn)
 
 	if err != nil {
 		return nil, cerror.NewInternalError("internal.internal.new_app.grpc_conn.error", err.Error())
@@ -118,20 +95,8 @@ func New(config *conf.AppConfig, shutdown func(ctx context.Context) error) (*App
 		return nil, cerror.NewInternalError("internal.internal.new_engine.grpc_conn.error", err.Error())
 	}
 
-	// --------- Webitel Logger gRPC Connection ---------
-	app.wtelLogger, err = wlogger.NewLoggerClient(wlogger.WithAmqpConnectionString(app.config.Rabbit.Url), wlogger.WithGrpcConsulAddress(config.Consul.Address))
-	if err != nil {
-		return nil, cerror.NewInternalError("internal.internal.new_app.grpc_conn.error", err.Error())
-	}
-
-	// --------- UserAuthSession Manager Initialization ---------
-	app.sessionManager, err = webitel_manager.NewWebitelAppAuthManager(app.webitelAppConn)
-	if err != nil {
-		return nil, err
-	}
-
-	// --------- Full Text Search Client ---------
-	app.ftsClient, err = ftspublisher.NewDefaultClient(app.rabbit)
+	// --------- Session Manager Initialization ---------
+	app.sessionManager, err = webitel_app.New(app.webitelAppConn)
 	if err != nil {
 		return nil, err
 	}
@@ -168,8 +133,6 @@ func (a *App) Start() error { // Change return type to standard error
 		return err
 	}
 
-	a.initCustom()
-
 	// * run grpc server
 	go a.server.Start()
 	return <-a.exitChan
@@ -199,15 +162,4 @@ func (a *App) Stop() error { // Change return type to standard error
 	}
 
 	return nil
-}
-
-func (a *App) AuthorizeFromContext(ctx context.Context) (*user_auth.UserAuthSession, error) { // Change return type to standard error
-	session, err := a.sessionManager.AuthorizeFromContext(ctx, "", auth.NONE)
-	if err != nil {
-		return nil, err
-	}
-	if session.IsExpired() {
-		return nil, cerror.NewUnauthorizedError("internal.internal.authorize_from_context.validate_session.expired", "session expired")
-	}
-	return session, nil
 }

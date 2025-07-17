@@ -5,9 +5,8 @@ import (
 	"strconv"
 	"strings"
 
-	_go "github.com/VoroniakPavlo/call_audit/protos/storage"
-
 	"github.com/jackc/pgtype"
+	_go "github.com/VoroniakPavlo/call_audit/api/protos/storage"
 )
 
 type ScanFunc func(src any) error
@@ -84,9 +83,10 @@ func ScanRowLookup(value **_go.Lookup) any {
 		}
 
 		var (
-			ok  bool
-			str pgtype.Text
-			row = []pgtype.TextDecoder{
+			hasID   bool
+			hasName bool
+			str     pgtype.Text
+			row     = []pgtype.TextDecoder{
 				TextDecoder(func(src []byte) error {
 					if len(src) == 0 {
 						return nil
@@ -100,6 +100,7 @@ func ScanRowLookup(value **_go.Lookup) any {
 						return err
 					}
 					res.Id = id
+					hasID = true
 					return nil
 				}),
 				TextDecoder(func(src []byte) error {
@@ -111,25 +112,21 @@ func ScanRowLookup(value **_go.Lookup) any {
 						return err
 					}
 					res.Name = str.String
-					ok = ok || (str.String != "" && str.String != "[deleted]") // && str.Status == pgtype.Present
+					hasName = str.String != "" && str.String != "[deleted]"
 					return nil
 				}),
 			}
 			raw = pgtype.NewCompositeTextScanner(nil, src)
 		)
 
-		var err error
 		for _, col := range row {
-
 			raw.ScanDecoder(col)
-
-			err = raw.Err()
-			if err != nil {
+			if err := raw.Err(); err != nil {
 				return err
 			}
 		}
 
-		if ok {
+		if hasID || hasName {
 			*(value) = res
 		}
 
@@ -178,7 +175,7 @@ func ScanRowExtendedLookup(value **_go.ExtendedLookup) any {
 						return err
 					}
 					res.Name = str.String
-					ok = ok || (str.String != "" && str.String != "[deleted]") // && str.Status == pgtype.Present
+					ok = ok || (str.String != "" && str.String != "[deleted]")
 					return nil
 				}),
 				TextDecoder(func(src []byte) error {
@@ -190,110 +187,7 @@ func ScanRowExtendedLookup(value **_go.ExtendedLookup) any {
 						return err
 					}
 					res.Type = str.String
-					ok = ok || (str.String != "" && str.String != "[deleted]") // && str.Status == pgtype.Present
-					return nil
-				}),
-			}
-			raw = pgtype.NewCompositeTextScanner(nil, src)
-		)
-
-		var err error
-		for _, col := range row {
-
-			raw.ScanDecoder(col)
-
-			err = raw.Err()
-			if err != nil {
-				return err
-			}
-		}
-
-		if ok {
-			*(value) = res
-		}
-
-		return nil
-	})
-}
-
-func ScanRelatedCaseLookup(value **_go.RelatedCaseLookup) any {
-	return TextDecoder(func(src []byte) error {
-		res := *(value)
-		*(value) = nil
-
-		if len(src) == 0 {
-			return nil // NULL
-		}
-
-		if res == nil {
-			res = new(_go.RelatedCaseLookup)
-		}
-
-		var (
-			ok  bool
-			str pgtype.Text
-			num pgtype.Int8
-			row = []pgtype.TextDecoder{
-				TextDecoder(func(src []byte) error {
-					if len(src) == 0 {
-						return nil
-					}
-					err := num.DecodeText(nil, src)
-					if err != nil {
-						return err
-					}
-					res.Id = num.Int
-					return nil
-				}),
-				TextDecoder(func(src []byte) error {
-					if len(src) == 0 {
-						return nil
-					}
-					err := str.DecodeText(nil, src)
-					if err != nil {
-						return err
-					}
-					res.Name = str.String
 					ok = ok || (str.String != "" && str.String != "[deleted]")
-					return nil
-				}),
-				TextDecoder(func(src []byte) error {
-					if len(src) == 0 {
-						return nil
-					}
-					err := str.DecodeText(nil, src)
-					if err != nil {
-						return err
-					}
-					res.Subject = str.String
-					ok = ok || (str.String != "" && str.String != "[deleted]")
-					return nil
-				}),
-				TextDecoder(func(src []byte) error {
-					if len(src) == 0 {
-						return nil
-					}
-					err := str.DecodeText(nil, src)
-					if err != nil {
-						return err
-					}
-					ver, parseErr := strconv.Atoi(str.String)
-					if parseErr != nil {
-						return parseErr
-					}
-					res.Ver = int32(ver)
-					return nil
-				}),
-				TextDecoder(func(src []byte) error {
-					if len(src) == 0 {
-						return nil
-					}
-					err := str.DecodeText(nil, src)
-					if err != nil {
-						return err
-					}
-					res.Color = str.String
-					ok = ok || str.String != ""
 					return nil
 				}),
 			}
@@ -309,13 +203,15 @@ func ScanRelatedCaseLookup(value **_go.RelatedCaseLookup) any {
 			}
 		}
 
-		if ok {
+		if res.Id != 0 {
 			*(value) = res
 		}
 
 		return nil
 	})
 }
+
+
 
 func ScanLookupList(value *[]*_go.Lookup) any {
 	return TextDecoder(func(src []byte) error {

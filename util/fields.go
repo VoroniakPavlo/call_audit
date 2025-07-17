@@ -280,7 +280,7 @@ func NormalizeEtag(etagType etag.EtagType, fields []string, etg *string, id *int
 	var err error
 	hasEtag, hasId, hasVer := FindEtagFields(fields)
 	if hasEtag {
-		*etg, err = etag.EncodeEtag(etagType, *id, *ver)
+		*etg = etag.EncodeEtag(etagType, *id, *ver)
 		if err != nil {
 			return err
 		}
@@ -303,7 +303,7 @@ func NormalizeEtag(etagType etag.EtagType, fields []string, etg *string, id *int
 // NormalizeEtag for each item in slice of your elements, FindEtagFields will be executed for each slice element.
 func NormalizeEtags(t etag.EtagType, hasEtag bool, hasId bool, hasVer bool, etg *string, id *int64, ver *int32) (err error) {
 	if hasEtag {
-		*etg, err = etag.EncodeEtag(t, *id, *ver)
+		*etg = etag.EncodeEtag(t, *id, *ver)
 		if err != nil {
 			return err
 		}

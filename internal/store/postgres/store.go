@@ -6,6 +6,7 @@ import (
 
 	conf "github.com/VoroniakPavlo/call_audit/config"
 	dberr "github.com/VoroniakPavlo/call_audit/internal/errors"
+	"github.com/VoroniakPavlo/call_audit/internal/store"
 
 	"github.com/jackc/pgx/v5/pgxpool"
 	otelpgx "github.com/webitel/webitel-go-kit/tracing/pgx"
@@ -13,10 +14,32 @@ import (
 
 // Store is the struct implementing the Store interface.
 type Store struct {
-	//------------cases stores ------------ ----//
+	//------------call_audit stores ------------ ----//
+	languageProfilesStore      store.LanguageProfileStore
+	callQuestionnaireRuleStore store.CallQuestionnaireRuleStore
+	config                     *conf.DatabaseConfig
+	conn                       *pgxpool.Pool
+}
 
-	config *conf.DatabaseConfig
-	conn   *pgxpool.Pool
+func New(config *conf.DatabaseConfig) *Store {
+	return &Store{config: config}
+}
+
+func (s *Store) LanguageProfiles() store.LanguageProfileStore {
+	if s.languageProfilesStore == nil {
+		lps := NewLanguageProfileStore(s)
+
+		s.languageProfilesStore = lps
+	}
+	return s.languageProfilesStore
+}
+
+func (s *Store) CallQuestionnaireRules() store.CallQuestionnaireRuleStore {
+	if s.callQuestionnaireRuleStore == nil {
+		cqrs := NewCallQuestionnaireRuleStore(s)
+		s.callQuestionnaireRuleStore = cqrs
+	}
+	return s.callQuestionnaireRuleStore
 }
 
 // Database returns the database connection or a custom error if it is not opened.
@@ -42,7 +65,7 @@ func (s *Store) Open() *dberr.DBError {
 		return dberr.NewDBError("store.open.connect.fail", err.Error())
 	}
 	s.conn = conn
-	slog.Debug("cases.store.connection_opened", slog.String("message", "postgres: connection opened"))
+	slog.Debug("call_audit.store.connection_opened", slog.String("message", "postgres: connection opened"))
 	return nil
 }
 
@@ -50,7 +73,7 @@ func (s *Store) Open() *dberr.DBError {
 func (s *Store) Close() *dberr.DBError {
 	if s.conn != nil {
 		s.conn.Close()
-		slog.Debug("cases.store.connection_closed", slog.String("message", "postgres: connection closed"))
+		slog.Debug("call_audit.store.connection_closed", slog.String("message", "postgres: connection closed"))
 		s.conn = nil
 	}
 	return nil

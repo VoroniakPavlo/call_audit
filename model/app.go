@@ -8,7 +8,7 @@ import (
 )
 
 const (
-	AppServiceName = "cases"
+	AppServiceName = "call_audit"
 	NamespaceName  = "webitel"
 )
 
