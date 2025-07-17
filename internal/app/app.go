@@ -4,12 +4,10 @@ import (
 	"context"
 	"fmt"
 	"log/slog"
-	"strings"
 
 	"github.com/VoroniakPavlo/call_audit/auth"
 	"github.com/VoroniakPavlo/call_audit/auth/manager/webitel_app"
 	"github.com/VoroniakPavlo/call_audit/internal/errors"
-	"google.golang.org/grpc/metadata"
 
 	conf "github.com/VoroniakPavlo/call_audit/config"
 	cerror "github.com/VoroniakPavlo/call_audit/internal/errors"
@@ -28,23 +26,6 @@ const (
 
 func NewBadRequestError(err error) errors.AppError {
 	return errors.NewBadRequestError("app.process_api.validation.error", err.Error())
-}
-
-func getClientIp(ctx context.Context) string {
-	v := ctx.Value("grpc_ctx")
-	info, ok := v.(metadata.MD)
-	if !ok {
-		info, ok = metadata.FromIncomingContext(ctx)
-	}
-	if !ok {
-		return ""
-	}
-	ip := strings.Join(info.Get("x-real-ip"), ",")
-	if ip == "" {
-		ip = strings.Join(info.Get("x-forwarded-for"), ",")
-	}
-
-	return ip
 }
 
 type App struct {

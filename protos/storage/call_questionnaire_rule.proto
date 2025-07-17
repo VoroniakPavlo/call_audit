@@ -58,5 +58,5 @@ service CallQuestionnaireRuleService {
   rpc List(Empty) returns (CallQuestionnaireRuleList);
   rpc Create(UpsertCallQuestionnaireRuleRequest) returns (CallQuestionnaireRule);
   rpc Update(UpsertCallQuestionnaireRuleRequest) returns (CallQuestionnaireRule);
-  rpc Delete(DeleteCallQuestionnaireRuleRequest) returns (Empty);
+  rpc Delete(DeleteCallQuestionnaireRuleRequest) returns (CallQuestionnaireRule);
 }

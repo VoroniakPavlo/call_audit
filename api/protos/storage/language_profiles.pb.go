@@ -700,13 +700,13 @@ const file_protos_storage_language_profiles_proto_rawDesc = "" +
 	"\x1dUpdateLanguageProfileResponse\x122\n" +
 	"\aprofile\x18\x01 \x01(\v2\x18.storage.LanguageProfileR\aprofile\"9\n" +
 	"\x1dDeleteLanguageProfileResponse\x12\x18\n" +
-	"\asuccess\x18\x01 \x01(\bR\asuccess2\x94\x04\n" +
-	"\x16LanguageProfileService\x12]\n" +
-	"\x12GetLanguageProfile\x12\".storage.GetLanguageProfileRequest\x1a#.storage.GetLanguageProfileResponse\x12c\n" +
-	"\x14ListLanguageProfiles\x12$.storage.ListLanguageProfilesRequest\x1a%.storage.ListLanguageProfilesResponse\x12f\n" +
-	"\x15CreateLanguageProfile\x12%.storage.CreateLanguageProfileRequest\x1a&.storage.CreateLanguageProfileResponse\x12f\n" +
-	"\x15UpdateLanguageProfile\x12%.storage.UpdateLanguageProfileRequest\x1a&.storage.UpdateLanguageProfileResponse\x12f\n" +
-	"\x15DeleteLanguageProfile\x12%.storage.DeleteLanguageProfileRequest\x1a&.storage.DeleteLanguageProfileResponseB\x98\x01\n" +
+	"\asuccess\x18\x01 \x01(\bR\asuccess2\xc8\x03\n" +
+	"\x16LanguageProfileService\x12N\n" +
+	"\x03Get\x12\".storage.GetLanguageProfileRequest\x1a#.storage.GetLanguageProfileResponse\x12S\n" +
+	"\x04List\x12$.storage.ListLanguageProfilesRequest\x1a%.storage.ListLanguageProfilesResponse\x12W\n" +
+	"\x06Create\x12%.storage.CreateLanguageProfileRequest\x1a&.storage.CreateLanguageProfileResponse\x12W\n" +
+	"\x06Update\x12%.storage.UpdateLanguageProfileRequest\x1a&.storage.UpdateLanguageProfileResponse\x12W\n" +
+	"\x06Delete\x12%.storage.DeleteLanguageProfileRequest\x1a&.storage.DeleteLanguageProfileResponseB\x98\x01\n" +
 	"\vcom.storageB\x15LanguageProfilesProtoP\x01Z6github.com/VoroniakPavlo/call_audit/api/protos/storage\xa2\x02\x03SXX\xaa\x02\aStorage\xca\x02\aStorage\xe2\x02\x13Storage\\GPBMetadata\xea\x02\aStorageb\x06proto3"
 
 var (
@@ -743,16 +743,16 @@ var file_protos_storage_language_profiles_proto_depIdxs = []int32{
 	0,  // 3: storage.ListLanguageProfilesResponse.profiles:type_name -> storage.LanguageProfile
 	0,  // 4: storage.CreateLanguageProfileResponse.profile:type_name -> storage.LanguageProfile
 	0,  // 5: storage.UpdateLanguageProfileResponse.profile:type_name -> storage.LanguageProfile
-	1,  // 6: storage.LanguageProfileService.GetLanguageProfile:input_type -> storage.GetLanguageProfileRequest
-	2,  // 7: storage.LanguageProfileService.ListLanguageProfiles:input_type -> storage.ListLanguageProfilesRequest
-	3,  // 8: storage.LanguageProfileService.CreateLanguageProfile:input_type -> storage.CreateLanguageProfileRequest
-	4,  // 9: storage.LanguageProfileService.UpdateLanguageProfile:input_type -> storage.UpdateLanguageProfileRequest
-	5,  // 10: storage.LanguageProfileService.DeleteLanguageProfile:input_type -> storage.DeleteLanguageProfileRequest
-	6,  // 11: storage.LanguageProfileService.GetLanguageProfile:output_type -> storage.GetLanguageProfileResponse
-	7,  // 12: storage.LanguageProfileService.ListLanguageProfiles:output_type -> storage.ListLanguageProfilesResponse
-	8,  // 13: storage.LanguageProfileService.CreateLanguageProfile:output_type -> storage.CreateLanguageProfileResponse
-	9,  // 14: storage.LanguageProfileService.UpdateLanguageProfile:output_type -> storage.UpdateLanguageProfileResponse
-	10, // 15: storage.LanguageProfileService.DeleteLanguageProfile:output_type -> storage.DeleteLanguageProfileResponse
+	1,  // 6: storage.LanguageProfileService.Get:input_type -> storage.GetLanguageProfileRequest
+	2,  // 7: storage.LanguageProfileService.List:input_type -> storage.ListLanguageProfilesRequest
+	3,  // 8: storage.LanguageProfileService.Create:input_type -> storage.CreateLanguageProfileRequest
+	4,  // 9: storage.LanguageProfileService.Update:input_type -> storage.UpdateLanguageProfileRequest
+	5,  // 10: storage.LanguageProfileService.Delete:input_type -> storage.DeleteLanguageProfileRequest
+	6,  // 11: storage.LanguageProfileService.Get:output_type -> storage.GetLanguageProfileResponse
+	7,  // 12: storage.LanguageProfileService.List:output_type -> storage.ListLanguageProfilesResponse
+	8,  // 13: storage.LanguageProfileService.Create:output_type -> storage.CreateLanguageProfileResponse
+	9,  // 14: storage.LanguageProfileService.Update:output_type -> storage.UpdateLanguageProfileResponse
+	10, // 15: storage.LanguageProfileService.Delete:output_type -> storage.DeleteLanguageProfileResponse
 	11, // [11:16] is the sub-list for method output_type
 	6,  // [6:11] is the sub-list for method input_type
 	6,  // [6:6] is the sub-list for extension type_name

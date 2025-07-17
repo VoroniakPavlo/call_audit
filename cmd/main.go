@@ -46,6 +46,10 @@ func Run() {
 	} else {
 		slog.Info("call_audit.main.application_started_successfully")
 	}
+
+	// test
+
+	
 }
 
 func initSignals(application *app.App) {

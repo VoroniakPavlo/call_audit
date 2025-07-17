@@ -3,35 +3,35 @@ package app
 import (
 	"context"
 
-	"github.com/VoroniakPavlo/call_audit/api/protos/storage"
+	pb "github.com/VoroniakPavlo/call_audit/api/protos/storage"
 )
 
 type LanguageProfilesService struct {
-	app *App
-	storage.UnimplementedLanguageProfileServiceServer
+	app *App // Define App type below or import from the correct package
+	pb.UnimplementedLanguageProfileServiceServer
 }
 
-func (s *LanguageProfilesService) CreateLanguageProfile(ctx context.Context, req *storage.CreateLanguageProfileRequest) (*storage.CreateLanguageProfileResponse, error) {
+func (s *LanguageProfilesService) CreateLanguageProfile(ctx context.Context, req *pb.CreateLanguageProfileRequest) (*pb.CreateLanguageProfileResponse, error) {
 	// TODO: implement your logic here
-	return &storage.CreateLanguageProfileResponse{}, nil
+	return &pb.CreateLanguageProfileResponse{}, nil
 }
 
-func (s *LanguageProfilesService) GetLanguageProfile(ctx context.Context, req *storage.GetLanguageProfileRequest) (*storage.GetLanguageProfileResponse, error) {
+func (s *LanguageProfilesService) GetLanguageProfile(ctx context.Context, req *pb.GetLanguageProfileRequest) (*pb.GetLanguageProfileResponse, error) {
 	// TODO: implement your logic here
-	return &storage.GetLanguageProfileResponse{}, nil
+	return &pb.GetLanguageProfileResponse{}, nil
 }
 
-func (s *LanguageProfilesService) UpdateLanguageProfile(ctx context.Context, req *storage.UpdateLanguageProfileRequest) (*storage.UpdateLanguageProfileResponse, error) {
+func (s *LanguageProfilesService) UpdateLanguageProfile(ctx context.Context, req *pb.UpdateLanguageProfileRequest) (*pb.UpdateLanguageProfileResponse, error) {
 	// TODO: implement your logic here
-	return &storage.UpdateLanguageProfileResponse{}, nil
+	return &pb.UpdateLanguageProfileResponse{}, nil
 }
 
-func (s *LanguageProfilesService) DeleteLanguageProfile(ctx context.Context, req *storage.DeleteLanguageProfileRequest) (*storage.DeleteLanguageProfileResponse, error) {
+func (s *LanguageProfilesService) DeleteLanguageProfile(ctx context.Context, req *pb.DeleteLanguageProfileRequest) (*pb.DeleteLanguageProfileResponse, error) {
 	// TODO: implement your logic here
-	return &storage.DeleteLanguageProfileResponse{}, nil
+	return &pb.DeleteLanguageProfileResponse{}, nil
 }
 
-func (s *LanguageProfilesService) ListLanguageProfiles(ctx context.Context, req *storage.ListLanguageProfilesRequest) (*storage.ListLanguageProfilesResponse, error) {
+func (s *LanguageProfilesService) ListLanguageProfiles(ctx context.Context, req *pb.ListLanguageProfilesRequest) (*pb.ListLanguageProfilesResponse, error) {
 	// TODO: implement your logic here
-	return &storage.ListLanguageProfilesResponse{}, nil
+	return &pb.ListLanguageProfilesResponse{}, nil
 }

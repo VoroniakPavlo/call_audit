@@ -32,6 +32,8 @@ func (l *LanguageProfileStore) List(ctx context.Context) ([]*storage.LanguagePro
 
 // Update implements store.LanguageProfileStore.
 func (l *LanguageProfileStore) Update(ctx context.Context, profile *storage.LanguageProfile) (*storage.LanguageProfile, error) {
+	a, _ := l.storage.Database()
+	a.Exec(ctx, "SELECT 1") // Example query to check connection
 	panic("unimplemented")
 }
 

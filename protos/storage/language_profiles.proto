@@ -78,9 +78,9 @@ message DeleteLanguageProfileResponse {
 // === SERVICE ===
 
 service LanguageProfileService {
-  rpc GetLanguageProfile(GetLanguageProfileRequest) returns (GetLanguageProfileResponse);
-  rpc ListLanguageProfiles(ListLanguageProfilesRequest) returns (ListLanguageProfilesResponse);
-  rpc CreateLanguageProfile(CreateLanguageProfileRequest) returns (CreateLanguageProfileResponse);
-  rpc UpdateLanguageProfile(UpdateLanguageProfileRequest) returns (UpdateLanguageProfileResponse);
-  rpc DeleteLanguageProfile(DeleteLanguageProfileRequest) returns (DeleteLanguageProfileResponse);
+  rpc Get(GetLanguageProfileRequest) returns (GetLanguageProfileResponse);
+  rpc List(ListLanguageProfilesRequest) returns (ListLanguageProfilesResponse);
+  rpc Create(CreateLanguageProfileRequest) returns (CreateLanguageProfileResponse);
+  rpc Update(UpdateLanguageProfileRequest) returns (UpdateLanguageProfileResponse);
+  rpc Delete(DeleteLanguageProfileRequest) returns (DeleteLanguageProfileResponse);
 }

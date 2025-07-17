@@ -93,7 +93,7 @@ var WebitelAPI = WebitelServicesInfo{
 		ObjClass:           "",
 		AdditionalLicenses: []string{},
 		WebitelMethods: map[string]WebitelMethod{
-			"GetLanguageProfile": WebitelMethod{
+			"Get": WebitelMethod{
 				Access: 0,
 				Input:  "GetLanguageProfileRequest",
 				Output: "GetLanguageProfileResponse",
@@ -104,7 +104,7 @@ var WebitelAPI = WebitelServicesInfo{
 					},
 				},
 			},
-			"ListLanguageProfiles": WebitelMethod{
+			"List": WebitelMethod{
 				Access: 0,
 				Input:  "ListLanguageProfilesRequest",
 				Output: "ListLanguageProfilesResponse",
@@ -115,7 +115,7 @@ var WebitelAPI = WebitelServicesInfo{
 					},
 				},
 			},
-			"CreateLanguageProfile": WebitelMethod{
+			"Create": WebitelMethod{
 				Access: 0,
 				Input:  "CreateLanguageProfileRequest",
 				Output: "CreateLanguageProfileResponse",
@@ -126,7 +126,7 @@ var WebitelAPI = WebitelServicesInfo{
 					},
 				},
 			},
-			"UpdateLanguageProfile": WebitelMethod{
+			"Update": WebitelMethod{
 				Access: 0,
 				Input:  "UpdateLanguageProfileRequest",
 				Output: "UpdateLanguageProfileResponse",
@@ -137,7 +137,7 @@ var WebitelAPI = WebitelServicesInfo{
 					},
 				},
 			},
-			"DeleteLanguageProfile": WebitelMethod{
+			"Delete": WebitelMethod{
 				Access: 0,
 				Input:  "DeleteLanguageProfileRequest",
 				Output: "DeleteLanguageProfileResponse",

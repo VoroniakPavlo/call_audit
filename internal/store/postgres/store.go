@@ -17,8 +17,10 @@ type Store struct {
 	//------------call_audit stores ------------ ----//
 	languageProfilesStore      store.LanguageProfileStore
 	callQuestionnaireRuleStore store.CallQuestionnaireRuleStore
-	config                     *conf.DatabaseConfig
-	conn                       *pgxpool.Pool
+
+	serviceStore                 store.ServiceStore
+	config                      *conf.DatabaseConfig
+	conn                        *pgxpool.Pool
 }
 
 func New(config *conf.DatabaseConfig) *Store {
@@ -40,6 +42,13 @@ func (s *Store) CallQuestionnaireRules() store.CallQuestionnaireRuleStore {
 		s.callQuestionnaireRuleStore = cqrs
 	}
 	return s.callQuestionnaireRuleStore
+}
+
+func (s *Store) ServiceStore() store.ServiceStore {
+	if s.serviceStore == nil {
+		s.serviceStore = NewServiceStore(s)
+	}
+	return s.serviceStore
 }
 
 // Database returns the database connection or a custom error if it is not opened.

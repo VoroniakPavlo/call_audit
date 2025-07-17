@@ -19,22 +19,22 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	LanguageProfileService_GetLanguageProfile_FullMethodName    = "/storage.LanguageProfileService/GetLanguageProfile"
-	LanguageProfileService_ListLanguageProfiles_FullMethodName  = "/storage.LanguageProfileService/ListLanguageProfiles"
-	LanguageProfileService_CreateLanguageProfile_FullMethodName = "/storage.LanguageProfileService/CreateLanguageProfile"
-	LanguageProfileService_UpdateLanguageProfile_FullMethodName = "/storage.LanguageProfileService/UpdateLanguageProfile"
-	LanguageProfileService_DeleteLanguageProfile_FullMethodName = "/storage.LanguageProfileService/DeleteLanguageProfile"
+	LanguageProfileService_Get_FullMethodName    = "/storage.LanguageProfileService/Get"
+	LanguageProfileService_List_FullMethodName   = "/storage.LanguageProfileService/List"
+	LanguageProfileService_Create_FullMethodName = "/storage.LanguageProfileService/Create"
+	LanguageProfileService_Update_FullMethodName = "/storage.LanguageProfileService/Update"
+	LanguageProfileService_Delete_FullMethodName = "/storage.LanguageProfileService/Delete"
 )
 
 // LanguageProfileServiceClient is the client API for LanguageProfileService service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type LanguageProfileServiceClient interface {
-	GetLanguageProfile(ctx context.Context, in *GetLanguageProfileRequest, opts ...grpc.CallOption) (*GetLanguageProfileResponse, error)
-	ListLanguageProfiles(ctx context.Context, in *ListLanguageProfilesRequest, opts ...grpc.CallOption) (*ListLanguageProfilesResponse, error)
-	CreateLanguageProfile(ctx context.Context, in *CreateLanguageProfileRequest, opts ...grpc.CallOption) (*CreateLanguageProfileResponse, error)
-	UpdateLanguageProfile(ctx context.Context, in *UpdateLanguageProfileRequest, opts ...grpc.CallOption) (*UpdateLanguageProfileResponse, error)
-	DeleteLanguageProfile(ctx context.Context, in *DeleteLanguageProfileRequest, opts ...grpc.CallOption) (*DeleteLanguageProfileResponse, error)
+	Get(ctx context.Context, in *GetLanguageProfileRequest, opts ...grpc.CallOption) (*GetLanguageProfileResponse, error)
+	List(ctx context.Context, in *ListLanguageProfilesRequest, opts ...grpc.CallOption) (*ListLanguageProfilesResponse, error)
+	Create(ctx context.Context, in *CreateLanguageProfileRequest, opts ...grpc.CallOption) (*CreateLanguageProfileResponse, error)
+	Update(ctx context.Context, in *UpdateLanguageProfileRequest, opts ...grpc.CallOption) (*UpdateLanguageProfileResponse, error)
+	Delete(ctx context.Context, in *DeleteLanguageProfileRequest, opts ...grpc.CallOption) (*DeleteLanguageProfileResponse, error)
 }
 
 type languageProfileServiceClient struct {
@@ -45,50 +45,50 @@ func NewLanguageProfileServiceClient(cc grpc.ClientConnInterface) LanguageProfil
 	return &languageProfileServiceClient{cc}
 }
 
-func (c *languageProfileServiceClient) GetLanguageProfile(ctx context.Context, in *GetLanguageProfileRequest, opts ...grpc.CallOption) (*GetLanguageProfileResponse, error) {
+func (c *languageProfileServiceClient) Get(ctx context.Context, in *GetLanguageProfileRequest, opts ...grpc.CallOption) (*GetLanguageProfileResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(GetLanguageProfileResponse)
-	err := c.cc.Invoke(ctx, LanguageProfileService_GetLanguageProfile_FullMethodName, in, out, cOpts...)
+	err := c.cc.Invoke(ctx, LanguageProfileService_Get_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *languageProfileServiceClient) ListLanguageProfiles(ctx context.Context, in *ListLanguageProfilesRequest, opts ...grpc.CallOption) (*ListLanguageProfilesResponse, error) {
+func (c *languageProfileServiceClient) List(ctx context.Context, in *ListLanguageProfilesRequest, opts ...grpc.CallOption) (*ListLanguageProfilesResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(ListLanguageProfilesResponse)
-	err := c.cc.Invoke(ctx, LanguageProfileService_ListLanguageProfiles_FullMethodName, in, out, cOpts...)
+	err := c.cc.Invoke(ctx, LanguageProfileService_List_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *languageProfileServiceClient) CreateLanguageProfile(ctx context.Context, in *CreateLanguageProfileRequest, opts ...grpc.CallOption) (*CreateLanguageProfileResponse, error) {
+func (c *languageProfileServiceClient) Create(ctx context.Context, in *CreateLanguageProfileRequest, opts ...grpc.CallOption) (*CreateLanguageProfileResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(CreateLanguageProfileResponse)
-	err := c.cc.Invoke(ctx, LanguageProfileService_CreateLanguageProfile_FullMethodName, in, out, cOpts...)
+	err := c.cc.Invoke(ctx, LanguageProfileService_Create_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *languageProfileServiceClient) UpdateLanguageProfile(ctx context.Context, in *UpdateLanguageProfileRequest, opts ...grpc.CallOption) (*UpdateLanguageProfileResponse, error) {
+func (c *languageProfileServiceClient) Update(ctx context.Context, in *UpdateLanguageProfileRequest, opts ...grpc.CallOption) (*UpdateLanguageProfileResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(UpdateLanguageProfileResponse)
-	err := c.cc.Invoke(ctx, LanguageProfileService_UpdateLanguageProfile_FullMethodName, in, out, cOpts...)
+	err := c.cc.Invoke(ctx, LanguageProfileService_Update_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *languageProfileServiceClient) DeleteLanguageProfile(ctx context.Context, in *DeleteLanguageProfileRequest, opts ...grpc.CallOption) (*DeleteLanguageProfileResponse, error) {
+func (c *languageProfileServiceClient) Delete(ctx context.Context, in *DeleteLanguageProfileRequest, opts ...grpc.CallOption) (*DeleteLanguageProfileResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(DeleteLanguageProfileResponse)
-	err := c.cc.Invoke(ctx, LanguageProfileService_DeleteLanguageProfile_FullMethodName, in, out, cOpts...)
+	err := c.cc.Invoke(ctx, LanguageProfileService_Delete_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -99,11 +99,11 @@ func (c *languageProfileServiceClient) DeleteLanguageProfile(ctx context.Context
 // All implementations must embed UnimplementedLanguageProfileServiceServer
 // for forward compatibility.
 type LanguageProfileServiceServer interface {
-	GetLanguageProfile(context.Context, *GetLanguageProfileRequest) (*GetLanguageProfileResponse, error)
-	ListLanguageProfiles(context.Context, *ListLanguageProfilesRequest) (*ListLanguageProfilesResponse, error)
-	CreateLanguageProfile(context.Context, *CreateLanguageProfileRequest) (*CreateLanguageProfileResponse, error)
-	UpdateLanguageProfile(context.Context, *UpdateLanguageProfileRequest) (*UpdateLanguageProfileResponse, error)
-	DeleteLanguageProfile(context.Context, *DeleteLanguageProfileRequest) (*DeleteLanguageProfileResponse, error)
+	Get(context.Context, *GetLanguageProfileRequest) (*GetLanguageProfileResponse, error)
+	List(context.Context, *ListLanguageProfilesRequest) (*ListLanguageProfilesResponse, error)
+	Create(context.Context, *CreateLanguageProfileRequest) (*CreateLanguageProfileResponse, error)
+	Update(context.Context, *UpdateLanguageProfileRequest) (*UpdateLanguageProfileResponse, error)
+	Delete(context.Context, *DeleteLanguageProfileRequest) (*DeleteLanguageProfileResponse, error)
 	mustEmbedUnimplementedLanguageProfileServiceServer()
 }
 
@@ -114,20 +114,20 @@ type LanguageProfileServiceServer interface {
 // pointer dereference when methods are called.
 type UnimplementedLanguageProfileServiceServer struct{}
 
-func (UnimplementedLanguageProfileServiceServer) GetLanguageProfile(context.Context, *GetLanguageProfileRequest) (*GetLanguageProfileResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetLanguageProfile not implemented")
+func (UnimplementedLanguageProfileServiceServer) Get(context.Context, *GetLanguageProfileRequest) (*GetLanguageProfileResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Get not implemented")
 }
-func (UnimplementedLanguageProfileServiceServer) ListLanguageProfiles(context.Context, *ListLanguageProfilesRequest) (*ListLanguageProfilesResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method ListLanguageProfiles not implemented")
+func (UnimplementedLanguageProfileServiceServer) List(context.Context, *ListLanguageProfilesRequest) (*ListLanguageProfilesResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method List not implemented")
 }
-func (UnimplementedLanguageProfileServiceServer) CreateLanguageProfile(context.Context, *CreateLanguageProfileRequest) (*CreateLanguageProfileResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method CreateLanguageProfile not implemented")
+func (UnimplementedLanguageProfileServiceServer) Create(context.Context, *CreateLanguageProfileRequest) (*CreateLanguageProfileResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Create not implemented")
 }
-func (UnimplementedLanguageProfileServiceServer) UpdateLanguageProfile(context.Context, *UpdateLanguageProfileRequest) (*UpdateLanguageProfileResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method UpdateLanguageProfile not implemented")
+func (UnimplementedLanguageProfileServiceServer) Update(context.Context, *UpdateLanguageProfileRequest) (*UpdateLanguageProfileResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Update not implemented")
 }
-func (UnimplementedLanguageProfileServiceServer) DeleteLanguageProfile(context.Context, *DeleteLanguageProfileRequest) (*DeleteLanguageProfileResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method DeleteLanguageProfile not implemented")
+func (UnimplementedLanguageProfileServiceServer) Delete(context.Context, *DeleteLanguageProfileRequest) (*DeleteLanguageProfileResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Delete not implemented")
 }
 func (UnimplementedLanguageProfileServiceServer) mustEmbedUnimplementedLanguageProfileServiceServer() {
 }
@@ -151,92 +151,92 @@ func RegisterLanguageProfileServiceServer(s grpc.ServiceRegistrar, srv LanguageP
 	s.RegisterService(&LanguageProfileService_ServiceDesc, srv)
 }
 
-func _LanguageProfileService_GetLanguageProfile_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _LanguageProfileService_Get_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(GetLanguageProfileRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(LanguageProfileServiceServer).GetLanguageProfile(ctx, in)
+		return srv.(LanguageProfileServiceServer).Get(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: LanguageProfileService_GetLanguageProfile_FullMethodName,
+		FullMethod: LanguageProfileService_Get_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(LanguageProfileServiceServer).GetLanguageProfile(ctx, req.(*GetLanguageProfileRequest))
+		return srv.(LanguageProfileServiceServer).Get(ctx, req.(*GetLanguageProfileRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _LanguageProfileService_ListLanguageProfiles_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _LanguageProfileService_List_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(ListLanguageProfilesRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(LanguageProfileServiceServer).ListLanguageProfiles(ctx, in)
+		return srv.(LanguageProfileServiceServer).List(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: LanguageProfileService_ListLanguageProfiles_FullMethodName,
+		FullMethod: LanguageProfileService_List_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(LanguageProfileServiceServer).ListLanguageProfiles(ctx, req.(*ListLanguageProfilesRequest))
+		return srv.(LanguageProfileServiceServer).List(ctx, req.(*ListLanguageProfilesRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _LanguageProfileService_CreateLanguageProfile_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _LanguageProfileService_Create_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(CreateLanguageProfileRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(LanguageProfileServiceServer).CreateLanguageProfile(ctx, in)
+		return srv.(LanguageProfileServiceServer).Create(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: LanguageProfileService_CreateLanguageProfile_FullMethodName,
+		FullMethod: LanguageProfileService_Create_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(LanguageProfileServiceServer).CreateLanguageProfile(ctx, req.(*CreateLanguageProfileRequest))
+		return srv.(LanguageProfileServiceServer).Create(ctx, req.(*CreateLanguageProfileRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _LanguageProfileService_UpdateLanguageProfile_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _LanguageProfileService_Update_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(UpdateLanguageProfileRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(LanguageProfileServiceServer).UpdateLanguageProfile(ctx, in)
+		return srv.(LanguageProfileServiceServer).Update(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: LanguageProfileService_UpdateLanguageProfile_FullMethodName,
+		FullMethod: LanguageProfileService_Update_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(LanguageProfileServiceServer).UpdateLanguageProfile(ctx, req.(*UpdateLanguageProfileRequest))
+		return srv.(LanguageProfileServiceServer).Update(ctx, req.(*UpdateLanguageProfileRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _LanguageProfileService_DeleteLanguageProfile_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _LanguageProfileService_Delete_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(DeleteLanguageProfileRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(LanguageProfileServiceServer).DeleteLanguageProfile(ctx, in)
+		return srv.(LanguageProfileServiceServer).Delete(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: LanguageProfileService_DeleteLanguageProfile_FullMethodName,
+		FullMethod: LanguageProfileService_Delete_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(LanguageProfileServiceServer).DeleteLanguageProfile(ctx, req.(*DeleteLanguageProfileRequest))
+		return srv.(LanguageProfileServiceServer).Delete(ctx, req.(*DeleteLanguageProfileRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -249,24 +249,24 @@ var LanguageProfileService_ServiceDesc = grpc.ServiceDesc{
 	HandlerType: (*LanguageProfileServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "GetLanguageProfile",
-			Handler:    _LanguageProfileService_GetLanguageProfile_Handler,
+			MethodName: "Get",
+			Handler:    _LanguageProfileService_Get_Handler,
 		},
 		{
-			MethodName: "ListLanguageProfiles",
-			Handler:    _LanguageProfileService_ListLanguageProfiles_Handler,
+			MethodName: "List",
+			Handler:    _LanguageProfileService_List_Handler,
 		},
 		{
-			MethodName: "CreateLanguageProfile",
-			Handler:    _LanguageProfileService_CreateLanguageProfile_Handler,
+			MethodName: "Create",
+			Handler:    _LanguageProfileService_Create_Handler,
 		},
 		{
-			MethodName: "UpdateLanguageProfile",
-			Handler:    _LanguageProfileService_UpdateLanguageProfile_Handler,
+			MethodName: "Update",
+			Handler:    _LanguageProfileService_Update_Handler,
 		},
 		{
-			MethodName: "DeleteLanguageProfile",
-			Handler:    _LanguageProfileService_DeleteLanguageProfile_Handler,
+			MethodName: "Delete",
+			Handler:    _LanguageProfileService_Delete_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

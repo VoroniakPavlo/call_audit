@@ -10,6 +10,7 @@ import (
 type Store interface {
 	LanguageProfiles() LanguageProfileStore
 	CallQuestionnaireRules() CallQuestionnaireRuleStore
+	ServiceStore() ServiceStore
 	// ------------ Database Management ------------ //
 	Open() *dberr.DBError  // Return custom DB error
 	Close() *dberr.DBError // Return custom DB error
@@ -32,4 +33,9 @@ type CallQuestionnaireRuleStore interface {
 	Update(ctx context.Context, rule *_go.CallQuestionnaireRule) (*_go.CallQuestionnaireRule, error)
 	Delete(ctx context.Context, id int64) error
 	List(ctx context.Context) ([]*_go.CallQuestionnaireRule, error)
+}
+
+type ServiceStore interface {
+	Execute(ctx context.Context, query string, args ...interface{}) (result interface{}, err error)
+	Array(ctx context.Context, query string, args ...interface{}) ([]interface{}, error)
 }
