@@ -11,6 +11,7 @@ import (
 	"time"
 
 	"github.com/VoroniakPavlo/call_audit/internal/app"
+	"github.com/VoroniakPavlo/call_audit/model"
 	"github.com/webitel/storage/pool"
 	_ "github.com/webitel/storage/stt"
 	_ "github.com/webitel/storage/synchronizer"
@@ -67,7 +68,7 @@ func drop_finished_jobs(app *app.App) {
 
 func create_jobs(app *app.App, last int, limit int) any {
 	_, err := app.Store.ServiceStore().Execute(context.Background(),
-	`insert into call_audit.jobs(rule_id, type, params)
+		`insert into call_audit.jobs(rule_id, type, params)
 		select 1, 2,row_to_json( (h.id, f.id , h.stored_at, row_number() over (order by stored_at) ))
 				from call_center.cc_calls_history h
 					 inner join lateral (
@@ -91,10 +92,9 @@ func create_jobs(app *app.App, last int, limit int) any {
 	return nil
 }
 
-
-func profiles(app *app.App, limit int) ([]any, error) {
-	profiles, err := app.Store.ServiceStore().Array(context.Background(),
-	`select
+func getRules(app *app.App, limit int) ([]model.CallQuestionnaireRule, error) {
+	rules, err := app.Store.ServiceStore().Array(context.Background(),
+		`select
 			coalesce(last_stored_at, 'from') last,
 			r.id,
 			r.domain_id,
@@ -108,7 +108,24 @@ func profiles(app *app.App, limit int) ([]any, error) {
 		slog.Error("Failed to truncate jobs table")
 		return nil, err
 	}
-	return profiles, nil
+	if len(rules) == 0 {
+		slog.Info("No active rules found")
+		return nil, nil
+	}
+	// process rules
+
+	var processedRules []model.CallQuestionnaireRule
+	for _, v := range rules {
+		rule := model.CallQuestionnaireRule{
+			Last:          v["last"].(string),
+			Id:            v["id"].(int64),
+			DomainId:      v["domain_id"].(int64),
+			Active:        v["active"].(int64),
+			CallDirection: v["call_direction"].(string),
+		}
+		processedRules = append(processedRules, rule)
+	}
+	return processedRules, nil
 }
 
 func get_tasks(app *app.App) ([]any, error) {
@@ -139,19 +156,18 @@ func StartJobs(app *app.App) {
 		return
 	}
 
-	
 	go func() {
-		profs, err := profiles(app, 100)
+		profs, err := getRules(app, 100)
 		if err != nil {
 			slog.Error("Failed to get profiles")
 			return
 		}
 		for _, v := range profs {
-			create_jobs(app, 5, 100)
+			create_jobs(app, v.Last.Day(), int(v.Limit))
+			slog.Info("Created jobs for rule", slog.Int64("rule_id", int64(v.Id)), slog.Int64("active", int64(v.Active)), slog.String("last_stored_at", v.Last.String()))
 			time.Sleep(1 * time.Second)
 		}
 	}()
-	
 
 	go func() {
 		for {
@@ -161,13 +177,12 @@ func StartJobs(app *app.App) {
 	}()
 
 	p := pool.NewPool(100, 10)
-	
 
 	/*
-	for _, v := range get_tasks() {
-		p.Exec(v)
-	}
-		*/
+		for _, v := range get_tasks() {
+			p.Exec(v)
+		}
+	*/
 
 	go func() {
 		for i := 0; i <= 10000; i++ {

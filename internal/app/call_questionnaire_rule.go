@@ -4,6 +4,7 @@ import (
 	"context"
 
 	pb "github.com/VoroniakPavlo/call_audit/api/protos/storage"
+	cerror "github.com/VoroniakPavlo/call_audit/internal/errors"
 )
 
 type CallQuestionnaireRuleService struct {
@@ -32,6 +33,18 @@ func (s *CallQuestionnaireRuleService) Delete(ctx context.Context, req *pb.Delet
 }
 
 func (s *CallQuestionnaireRuleService) List(ctx context.Context) (*pb.CallQuestionnaireRuleList, error) {
-	// TODO: implement
-	return &pb.CallQuestionnaireRuleList{}, nil
+	res, err := s.app.Store.CallQuestionnaireRules().List(ctx)
+	if err != nil {
+		return nil, cerror.NewInternalError("call_questionnaire_rule_service.list.store.list.failed", err.Error())
+	}
+	return res, nil
+}
+
+func NewCallQuestionnaireRuleService(app *App) (*CallQuestionnaireRuleService, error) {
+
+	service := &CallQuestionnaireRuleService{
+		app: app,
+	}
+
+	return service, nil
 }

@@ -32,7 +32,7 @@ type CallQuestionnaireRuleStore interface {
 	Get(ctx context.Context, id int64) (*_go.CallQuestionnaireRule, error)
 	Update(ctx context.Context, rule *_go.CallQuestionnaireRule) (*_go.CallQuestionnaireRule, error)
 	Delete(ctx context.Context, id int64) error
-	List(ctx context.Context) ([]*_go.CallQuestionnaireRule, error)
+	List(ctx context.Context) (*_go.CallQuestionnaireRuleList, error)
 }
 
 type ServiceStore interface {

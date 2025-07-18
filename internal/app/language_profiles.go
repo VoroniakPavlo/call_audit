@@ -35,3 +35,12 @@ func (s *LanguageProfilesService) ListLanguageProfiles(ctx context.Context, req 
 	// TODO: implement your logic here
 	return &pb.ListLanguageProfilesResponse{}, nil
 }
+
+func NewLanguageProfileService(app *App) (*LanguageProfilesService, error) {
+
+	service := &LanguageProfilesService{
+		app: app,
+	}
+
+	return service, nil
+}

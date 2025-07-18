@@ -36,7 +36,7 @@ type CallQuestionnaireRuleServiceClient interface {
 	List(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*CallQuestionnaireRuleList, error)
 	Create(ctx context.Context, in *UpsertCallQuestionnaireRuleRequest, opts ...grpc.CallOption) (*CallQuestionnaireRule, error)
 	Update(ctx context.Context, in *UpsertCallQuestionnaireRuleRequest, opts ...grpc.CallOption) (*CallQuestionnaireRule, error)
-	Delete(ctx context.Context, in *DeleteCallQuestionnaireRuleRequest, opts ...grpc.CallOption) (*Empty, error)
+	Delete(ctx context.Context, in *DeleteCallQuestionnaireRuleRequest, opts ...grpc.CallOption) (*CallQuestionnaireRule, error)
 }
 
 type callQuestionnaireRuleServiceClient struct {
@@ -87,9 +87,9 @@ func (c *callQuestionnaireRuleServiceClient) Update(ctx context.Context, in *Ups
 	return out, nil
 }
 
-func (c *callQuestionnaireRuleServiceClient) Delete(ctx context.Context, in *DeleteCallQuestionnaireRuleRequest, opts ...grpc.CallOption) (*Empty, error) {
+func (c *callQuestionnaireRuleServiceClient) Delete(ctx context.Context, in *DeleteCallQuestionnaireRuleRequest, opts ...grpc.CallOption) (*CallQuestionnaireRule, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(Empty)
+	out := new(CallQuestionnaireRule)
 	err := c.cc.Invoke(ctx, CallQuestionnaireRuleService_Delete_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
@@ -107,7 +107,7 @@ type CallQuestionnaireRuleServiceServer interface {
 	List(context.Context, *Empty) (*CallQuestionnaireRuleList, error)
 	Create(context.Context, *UpsertCallQuestionnaireRuleRequest) (*CallQuestionnaireRule, error)
 	Update(context.Context, *UpsertCallQuestionnaireRuleRequest) (*CallQuestionnaireRule, error)
-	Delete(context.Context, *DeleteCallQuestionnaireRuleRequest) (*Empty, error)
+	Delete(context.Context, *DeleteCallQuestionnaireRuleRequest) (*CallQuestionnaireRule, error)
 	mustEmbedUnimplementedCallQuestionnaireRuleServiceServer()
 }
 
@@ -130,7 +130,7 @@ func (UnimplementedCallQuestionnaireRuleServiceServer) Create(context.Context, *
 func (UnimplementedCallQuestionnaireRuleServiceServer) Update(context.Context, *UpsertCallQuestionnaireRuleRequest) (*CallQuestionnaireRule, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Update not implemented")
 }
-func (UnimplementedCallQuestionnaireRuleServiceServer) Delete(context.Context, *DeleteCallQuestionnaireRuleRequest) (*Empty, error) {
+func (UnimplementedCallQuestionnaireRuleServiceServer) Delete(context.Context, *DeleteCallQuestionnaireRuleRequest) (*CallQuestionnaireRule, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Delete not implemented")
 }
 func (UnimplementedCallQuestionnaireRuleServiceServer) mustEmbedUnimplementedCallQuestionnaireRuleServiceServer() {

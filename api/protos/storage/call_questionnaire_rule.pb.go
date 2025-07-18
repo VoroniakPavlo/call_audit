@@ -208,6 +208,8 @@ func (x *CallQuestionnaireRule) GetSaveExplanation() bool {
 type CallQuestionnaireRuleList struct {
 	state         protoimpl.MessageState   `protogen:"open.v1"`
 	Items         []*CallQuestionnaireRule `protobuf:"bytes,1,rep,name=items,proto3" json:"items,omitempty"`
+	Page          int32                    `protobuf:"varint,2,opt,name=page,proto3" json:"page,omitempty"`
+	Next          bool                     `protobuf:"varint,3,opt,name=next,proto3" json:"next,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -247,6 +249,20 @@ func (x *CallQuestionnaireRuleList) GetItems() []*CallQuestionnaireRule {
 		return x.Items
 	}
 	return nil
+}
+
+func (x *CallQuestionnaireRuleList) GetPage() int32 {
+	if x != nil {
+		return x.Page
+	}
+	return 0
+}
+
+func (x *CallQuestionnaireRuleList) GetNext() bool {
+	if x != nil {
+		return x.Next
+	}
+	return false
 }
 
 // Message: GetByIdRequest
@@ -449,22 +465,24 @@ const file_protos_storage_call_questionnaire_rule_proto_rawDesc = "" +
 	"\x11min_call_duration\x18\x0f \x01(\x05R\x0fminCallDuration\x12\x1a\n" +
 	"\bvariable\x18\x10 \x01(\tR\bvariable\x12#\n" +
 	"\rdefault_promt\x18\x11 \x01(\tR\fdefaultPromt\x12)\n" +
-	"\x10save_explanation\x18\x12 \x01(\bR\x0fsaveExplanation\"U\n" +
+	"\x10save_explanation\x18\x12 \x01(\bR\x0fsaveExplanation\"}\n" +
 	"\x19CallQuestionnaireRuleList\x128\n" +
-	"\x05items\x18\x01 \x03(\v2\".call_center.CallQuestionnaireRuleR\x05items\"1\n" +
+	"\x05items\x18\x01 \x03(\v2\".call_center.CallQuestionnaireRuleR\x05items\x12\x12\n" +
+	"\x04page\x18\x02 \x01(\x05R\x04page\x12\x12\n" +
+	"\x04next\x18\x03 \x01(\bR\x04next\"1\n" +
 	"\x1fGetCallQuestionnaireRuleRequest\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\x05R\x02id\"4\n" +
 	"\"DeleteCallQuestionnaireRuleRequest\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\x05R\x02id\"\\\n" +
 	"\"UpsertCallQuestionnaireRuleRequest\x126\n" +
 	"\x04rule\x18\x01 \x01(\v2\".call_center.CallQuestionnaireRuleR\x04rule\"\a\n" +
-	"\x05Empty2\xc8\x03\n" +
+	"\x05Empty2\xd8\x03\n" +
 	"\x1cCallQuestionnaireRuleService\x12W\n" +
 	"\x03Get\x12,.call_center.GetCallQuestionnaireRuleRequest\x1a\".call_center.CallQuestionnaireRule\x12B\n" +
 	"\x04List\x12\x12.call_center.Empty\x1a&.call_center.CallQuestionnaireRuleList\x12]\n" +
 	"\x06Create\x12/.call_center.UpsertCallQuestionnaireRuleRequest\x1a\".call_center.CallQuestionnaireRule\x12]\n" +
-	"\x06Update\x12/.call_center.UpsertCallQuestionnaireRuleRequest\x1a\".call_center.CallQuestionnaireRule\x12M\n" +
-	"\x06Delete\x12/.call_center.DeleteCallQuestionnaireRuleRequest\x1a\x12.call_center.EmptyB\xad\x01\n" +
+	"\x06Update\x12/.call_center.UpsertCallQuestionnaireRuleRequest\x1a\".call_center.CallQuestionnaireRule\x12]\n" +
+	"\x06Delete\x12/.call_center.DeleteCallQuestionnaireRuleRequest\x1a\".call_center.CallQuestionnaireRuleB\xad\x01\n" +
 	"\x0fcom.call_centerB\x1aCallQuestionnaireRuleProtoP\x01Z6github.com/VoroniakPavlo/call_audit/api/protos/storage\xa2\x02\x03CXX\xaa\x02\n" +
 	"CallCenter\xca\x02\n" +
 	"CallCenter\xe2\x02\x16CallCenter\\GPBMetadata\xea\x02\n" +
@@ -508,7 +526,7 @@ var file_protos_storage_call_questionnaire_rule_proto_depIdxs = []int32{
 	1,  // 12: call_center.CallQuestionnaireRuleService.List:output_type -> call_center.CallQuestionnaireRuleList
 	0,  // 13: call_center.CallQuestionnaireRuleService.Create:output_type -> call_center.CallQuestionnaireRule
 	0,  // 14: call_center.CallQuestionnaireRuleService.Update:output_type -> call_center.CallQuestionnaireRule
-	5,  // 15: call_center.CallQuestionnaireRuleService.Delete:output_type -> call_center.Empty
+	0,  // 15: call_center.CallQuestionnaireRuleService.Delete:output_type -> call_center.CallQuestionnaireRule
 	11, // [11:16] is the sub-list for method output_type
 	6,  // [6:11] is the sub-list for method input_type
 	6,  // [6:6] is the sub-list for extension type_name

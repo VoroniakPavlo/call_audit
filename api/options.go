@@ -79,7 +79,7 @@ var WebitelAPI = WebitelServicesInfo{
 			"Delete": WebitelMethod{
 				Access: 0,
 				Input:  "DeleteCallQuestionnaireRuleRequest",
-				Output: "Empty",
+				Output: "CallQuestionnaireRule",
 				HttpBindings: []*HttpBinding{
 					{
 						Path:   "",
