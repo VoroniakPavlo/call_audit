@@ -4,7 +4,7 @@ package call_audit;
 
 import "google/protobuf/timestamp.proto";
 import "google/protobuf/wrappers.proto";
-import "github.com/VoroniakPavlo/call_audit/protos/storage/general.proto";
+import "github.com/VoroniakPavlo/call_audit/protos/call_audit/general.proto";
 
 option go_package = "github.com/VoroniakPavlo/call_audit/api/call_audit;call_audit";
 
@@ -28,6 +28,7 @@ message CallQuestionnaireRule {
   string variable = 16;
   string default_promt = 17;
   bool save_explanation = 18;
+  google.protobuf.Timestamp last_stored_at = 19;
 }
 
 // Message: CallQuestionnaireRuleList

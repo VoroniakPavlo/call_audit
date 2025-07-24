@@ -4,13 +4,13 @@ import (
 	"encoding/json"
 	"flag"
 	"fmt"
-	cerr "github.com/VoroniakPavlo/call_audit/internal/errors"
 	"os"
+
+	cerr "github.com/VoroniakPavlo/call_audit/internal/errors"
 )
 
 type AppConfig struct {
 	File            string                `json:"-"`
-	Rabbit          *RabbitConfig         `json:"rabbit,omitempty"`
 	Database        *DatabaseConfig       `json:"database,omitempty"`
 	Consul          *ConsulConfig         `json:"consul,omitempty"`
 	TriggerWatcher  *TriggerWatcherConfig `json:"trigger_watcher,omitempty"`
@@ -133,9 +133,6 @@ func LoadConfig() (*AppConfig, error) { // Change to return standard error
 		Address:       *consul,
 		PublicAddress: *grpcAddr,
 	}
-	appConfig.Rabbit = &RabbitConfig{
-		Url: *rabbitURL,
-	}
 	appConfig.TriggerWatcher = triggerConfig
 	appConfig.LoggerWatcher = loggerConfig
 	appConfig.FtsWatcher = ftsConfig
@@ -168,9 +165,6 @@ func LoadConfig() (*AppConfig, error) { // Change to return standard error
 	}
 	if appConfig.Consul.PublicAddress == "" {
 		return nil, cerr.NewInternalError("call_audit.main.missing_grpc_addr", "gRPC address is required")
-	}
-	if appConfig.Rabbit.Url == "" {
-		return nil, cerr.NewInternalError("call_audit.main.missing_rabbit_url", "Rabbit URL is required")
 	}
 
 	return &appConfig, nil

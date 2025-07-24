@@ -164,20 +164,6 @@ func buildQuestionnaireRuleSelectColumnsAndPlan(
 			plan = append(plan, func(rule *cr.CallQuestionnaireRule) any {
 				return &rule.UpdatedAt
 			})
-		case "updated_by":
-			base = base.Column(fmt.Sprintf(
-				"(SELECT ROW(id, COALESCE(name, username))::text FROM directory.wbt_user WHERE id = %s.updated_by) updated_by",
-				cqrLeft))
-			plan = append(plan, func(rule *cr.CallQuestionnaireRule) any {
-				return scanner.ScanRowLookup(&rule.UpdatedBy)
-			})
-		case "created_by":
-			base = base.Column(fmt.Sprintf(
-				"(SELECT ROW(id, COALESCE(name, username))::text FROM directory.wbt_user WHERE id = %s.created_by) created_by",
-				cqrLeft))
-			plan = append(plan, func(rule *cr.CallQuestionnaireRule) any {
-				return scanner.ScanRowLookup(&rule.CreatedBy)
-			})
 		case "enabled":
 			base = base.Column(util.Ident(cqrLeft, "enabled"))
 			plan = append(plan, func(rule *cr.CallQuestionnaireRule) any {

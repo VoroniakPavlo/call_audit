@@ -115,13 +115,28 @@ func getRules(app *app.App, limit int) ([]model.CallQuestionnaireRule, error) {
 	// process rules
 
 	var processedRules []model.CallQuestionnaireRule
-	for _, v := range rules {
+	for _, ruleMap := range rules {
+		ruleData, ok := ruleMap.(map[string]interface{})
+		if !ok {
+			slog.Error("ruleMap is not a map[string]interface{}")
+			continue
+		}
+		lastStr, ok := ruleData["last"].(string)
+		if !ok {
+			slog.Error("last field is not a string")
+			continue
+		}
+		lastTime, err := time.Parse("2006-01-02 15:04:05", lastStr)
+		if err != nil {
+			slog.Error("failed to parse last field as time.Time", slog.String("value", lastStr))
+			continue
+		}
 		rule := model.CallQuestionnaireRule{
-			Last:          v["last"].(string),
-			Id:            v["id"].(int64),
-			DomainId:      v["domain_id"].(int64),
-			Active:        v["active"].(int64),
-			CallDirection: v["call_direction"].(string),
+			Last: lastTime,
+			//	Id:            ruleData["id"].(int64),
+			//	DomainId:      ruleData["domain_id"].(int64),
+			//	Active:        ruleData["active"].(int64),
+			//	CallDirection: ruleData["call_direction"].(string),
 		}
 		processedRules = append(processedRules, rule)
 	}
