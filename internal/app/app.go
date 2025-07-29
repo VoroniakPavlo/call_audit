@@ -15,7 +15,6 @@ import (
 	"github.com/VoroniakPavlo/call_audit/internal/store"
 	"github.com/VoroniakPavlo/call_audit/internal/store/postgres"
 
-	engine "github.com/VoroniakPavlo/call_audit/api/engine"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 )
@@ -29,18 +28,17 @@ func NewBadRequestError(err error) errors.AppError {
 }
 
 type App struct {
-	config            *conf.AppConfig
-	Store             store.Store
-	server            *server.Server
-	exitChan          chan error
-	storageConn       *grpc.ClientConn
-	sessionManager    auth.Manager
-	webitelAppConn    *grpc.ClientConn
-	shutdown          func(ctx context.Context) error
-	log               *slog.Logger
-	rabbitExitChan    chan cerror.AppError
-	engineConn        *grpc.ClientConn
-	engineAgentClient engine.AgentServiceClient
+	config         *conf.AppConfig
+	Store          store.Store
+	server         *server.Server
+	exitChan       chan error
+	storageConn    *grpc.ClientConn
+	sessionManager auth.Manager
+	webitelAppConn *grpc.ClientConn
+	shutdown       func(ctx context.Context) error
+	log            *slog.Logger
+	rabbitExitChan chan cerror.AppError
+	engineConn     *grpc.ClientConn
 }
 
 func New(config *conf.AppConfig) (*App, error) {
@@ -62,18 +60,6 @@ func New(config *conf.AppConfig) (*App, error) {
 
 	if err != nil {
 		return nil, cerror.NewInternalError("internal.internal.new_app.grpc_conn.error", err.Error())
-	}
-
-	// --------- Webitel Engine gRPC Connection ---------
-	app.engineConn, err = grpc.NewClient(fmt.Sprintf("consul://%s/engine?wait=14s", config.Consul.Address),
-		grpc.WithDefaultServiceConfig(`{"loadBalancingPolicy": "round_robin"}`),
-		grpc.WithTransportCredentials(insecure.NewCredentials()),
-	)
-
-	app.engineAgentClient = engine.NewAgentServiceClient(app.engineConn)
-
-	if err != nil {
-		return nil, cerror.NewInternalError("internal.internal.new_engine.grpc_conn.error", err.Error())
 	}
 
 	// --------- Session Manager Initialization ---------
@@ -113,6 +99,9 @@ func (a *App) Start() error { // Change return type to standard error
 	if err != nil {
 		return err
 	}
+
+	// Jobs execution
+	StartJobs(a)
 
 	// * run grpc server
 	go a.server.Start()

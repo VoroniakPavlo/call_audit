@@ -1,12 +1,9 @@
 package util
 
 import (
-	"errors"
 	"strconv"
 	"strings"
 	"unicode"
-
-	"github.com/webitel/webitel-go-kit/etag"
 )
 
 // InlineFields explodes an inline 'attr,attr2 attr3' selector into ['attr','attr2','attr3'].
@@ -273,84 +270,6 @@ func EnsureFields(fields []string, requiredFields ...string) []string {
 		}
 	}
 	return fields
-}
-
-// NormalizeEtag normalizes etag, id, ver fields visibility for the response depending on what fields were requested.
-func NormalizeEtag(etagType etag.EtagType, fields []string, etg *string, id *int64, ver *int32) error {
-	var err error
-	hasEtag, hasId, hasVer := FindEtagFields(fields)
-	if hasEtag {
-		*etg = etag.EncodeEtag(etagType, *id, *ver)
-		if err != nil {
-			return err
-		}
-		// hide
-		if !hasId {
-			*id = 0
-		}
-		if !hasVer {
-			*ver = 0
-		}
-	}
-	return nil
-}
-
-// NormalizeEtags normalizes etag, id, ver fields visibility for the response depending on what fields were requested.
-// Function is an optimized-for-slice copy of NormalizeEtag function.
-//
-// Before usage you should call FindEtagFields on requested fields to find hasEtag, hasId, hasVer args.
-// Optimization consists in reduced number of cycles running through requested fields. If you are going to use
-// NormalizeEtag for each item in slice of your elements, FindEtagFields will be executed for each slice element.
-func NormalizeEtags(t etag.EtagType, hasEtag bool, hasId bool, hasVer bool, etg *string, id *int64, ver *int32) (err error) {
-	if hasEtag {
-		*etg = etag.EncodeEtag(t, *id, *ver)
-		if err != nil {
-			return err
-		}
-		// hide
-		if !hasId {
-			*id = 0
-		}
-		if !hasVer {
-			*ver = 0
-		}
-	}
-	return err
-}
-
-// ParseIds converts a slice of strings (each possibly containing comma-separated eTags or numeric IDs)
-// into a slice of int64. For example, given input ["1", "2,3", "etag4"], it converts each to int64 and returns []int64{1, 2, 3, 4}.
-func ParseIds(input []string, etagType etag.EtagType) ([]int64, error) {
-	var result []int64
-
-	for _, item := range input {
-		// Split the item by comma to handle comma-separated values
-		parts := strings.Split(item, ",")
-
-		for _, part := range parts {
-			// Trim whitespace
-			part = strings.TrimSpace(part)
-
-			// Try to parse as int64
-			num, err := strconv.ParseInt(part, 10, 64)
-			if err == nil {
-				// Successfully parsed as int64, add to result
-				result = append(result, num)
-				continue
-			}
-
-			// If parsing as int64 fails, try parsing as eTag
-			tag, etagErr := etag.EtagOrId(etagType, part)
-			if etagErr != nil {
-				return nil, errors.New("invalid eTag or ID: " + part)
-			}
-
-			// Add the eTag converted ID to result
-			result = append(result, tag.GetOid())
-		}
-	}
-
-	return result, nil
 }
 
 func SplitKnownAndUnknownFields(requestedFields []string, modelFields []string) (known []string, unknown []string) {

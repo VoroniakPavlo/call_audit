@@ -3,7 +3,7 @@ package store
 import (
 	"context"
 
-	_go "github.com/VoroniakPavlo/call_audit/api/protos/storage"
+	_go "github.com/VoroniakPavlo/call_audit/api/call_audit"
 	dberr "github.com/VoroniakPavlo/call_audit/internal/errors"
 )
 

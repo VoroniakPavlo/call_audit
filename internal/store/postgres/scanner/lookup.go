@@ -6,7 +6,7 @@ import (
 	"strings"
 
 	"github.com/jackc/pgtype"
-	_go "github.com/VoroniakPavlo/call_audit/api/protos/storage"
+	_go "github.com/VoroniakPavlo/call_audit/api/call_audit"
 )
 
 type ScanFunc func(src any) error

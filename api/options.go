@@ -3,7 +3,7 @@
 // - protoc-gen-go-webitel v1.0.0
 // - protoc                (unknown)
 
-package storage
+package call_audit
 
 // WebitelServicesInfo is the list of services defined in proto files.
 type WebitelServicesInfo map[string]WebitelServices

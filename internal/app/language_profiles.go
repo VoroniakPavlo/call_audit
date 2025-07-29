@@ -3,7 +3,7 @@ package app
 import (
 	"context"
 
-	pb "github.com/VoroniakPavlo/call_audit/api/protos/storage"
+	pb "github.com/VoroniakPavlo/call_audit/api/call_audit"
 )
 
 type LanguageProfilesService struct {

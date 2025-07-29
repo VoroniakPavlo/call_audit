@@ -9,7 +9,6 @@ import (
 	"github.com/VoroniakPavlo/call_audit/internal/store"
 
 	"github.com/jackc/pgx/v5/pgxpool"
-	otelpgx "github.com/webitel/webitel-go-kit/tracing/pgx"
 )
 
 // Store is the struct implementing the Store interface.
@@ -65,9 +64,6 @@ func (s *Store) Open() *dberr.DBError {
 	if err != nil {
 		return dberr.NewDBError("store.open.parse_config.fail", err.Error())
 	}
-
-	// Attach the OpenTelemetry tracer for pgx
-	config.ConnConfig.Tracer = otelpgx.NewTracer(otelpgx.WithTrimSQLInSpanName())
 
 	conn, err := pgxpool.NewWithConfig(context.Background(), config)
 	if err != nil {

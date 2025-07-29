@@ -5,9 +5,8 @@ import (
 	"fmt"
 
 	sq "github.com/Masterminds/squirrel"
-	cr "github.com/VoroniakPavlo/call_audit/api/protos/storage"
+	cr "github.com/VoroniakPavlo/call_audit/api/call_audit"
 	dberr "github.com/VoroniakPavlo/call_audit/internal/errors"
-	"github.com/VoroniakPavlo/call_audit/internal/store/postgres/scanner"
 	"github.com/VoroniakPavlo/call_audit/internal/store/util"
 	options "github.com/VoroniakPavlo/call_audit/model/options"
 )
@@ -41,55 +40,12 @@ func (c *CallQuestionnaireRuleStore) Get(ctx context.Context, id int64) (*cr.Cal
 
 // List implements store.CallQuestionnaireRuleStore.
 func (c *CallQuestionnaireRuleStore) List(ctx context.Context) (*cr.CallQuestionnaireRuleList, error) {
-	d, dbErr := c.storage.Database()
+	_, dbErr := c.storage.Database()
 	if dbErr != nil {
 		return nil, dberr.NewDBInternalError("postgres.call_questionnaire_rule.list.database_connection_error", dbErr)
 	}
 
-	selectBuilder, plan, err := c.buildListCallQuestionnaireRuleQuery(ctx, closeQuestionnaireRuleId)
-	if err != nil {
-		return nil, dberr.NewDBInternalError("postgres.call_questionnaire_rule.list.build_query_error", err)
-	}
-
-	query, args, err := selectBuilder.ToSql()
-	if err != nil {
-		return nil, dberr.NewDBInternalError("postgres.close_reason.list.query_build_error", err)
-	}
-	query = util.CompactSQL(query)
-
-	rows, err := d.Query(ctx, query, args...)
-	if err != nil {
-		return nil, dberr.NewDBInternalError("postgres.close_reason.list.execution_error", err)
-	}
-	defer rows.Close()
-
-	var reasons []*cr.CallQuestionnaireRule
-	lCount := 0
-	next := false
-	fetchAll := ctx.GetSize() == -1
-
-	for rows.Next() {
-		if !fetchAll && lCount >= int(ctx.GetSize()) {
-			next = true
-			break
-		}
-
-		reason := &cr.CallQuestionnaireRule{}
-		scanArgs := convertToCloseReasonScanArgs(plan, reason)
-
-		if err := rows.Scan(scanArgs...); err != nil {
-			return nil, dberr.NewDBInternalError("postgres.close_reason.list.row_scan_error", err)
-		}
-
-		reasons = append(reasons, reason)
-		lCount++
-	}
-
-	return &cr.CallQuestionnaireRuleList{
-		Page:  int32(ctx.GetPage()),
-		Next:  next,
-		Items: reasons,
-	}, nil
+	return &cr.CallQuestionnaireRuleList{}, nil
 }
 
 // Update implements store.CallQuestionnaireRuleStore.
@@ -177,7 +133,7 @@ func buildQuestionnaireRuleSelectColumnsAndPlan(
 		case "last_stored_at":
 			base = base.Column(util.Ident(cqrLeft, "last_stored_at"))
 			plan = append(plan, func(rule *cr.CallQuestionnaireRule) any {
-				return scanner.ScanTimestamp(&rule.LastStoredAt)
+				return &rule.LastStoredAt
 			})
 		default:
 			return base, nil, dberr.NewDBInternalError("postgres.close_reason.unknown_field", fmt.Errorf("unknown field: %s", field))

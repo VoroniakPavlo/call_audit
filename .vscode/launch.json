@@ -15,19 +15,10 @@
         "console": "integratedTerminal",
         "args": [
             "--id=pasha_ccc_1",
-              "--data_source=postgres://opensips:webitel@10.9.8.111:5432/webitel?fallback_application_name=engine&sslmode=disable&connect_timeout=10&search_path=call_center",
+              "--data_source=postgres://opensips:webitel@10.9.8.111:5432/webitel?sslmode=disable&connect_timeout=10",
               "--amqp=amqp://webitel:webitel@10.9.8.111:5672?heartbeat=10",
               "--consul=10.9.8.111:8500",
-              "--open_sip_addr=10.9.8.111",
-              "--ws_sip_addr=wss://dev.webitel.com/sip",
-              "--websocket=:10022",
-              "--dev=0",
-              "--grpc_port=4058",
-              "--grpc_addr=10.10.10.87",
-              "--public_host=https://dev.webitel.com",
-              "--ping_client_interval=10000",
-              "--ping_client_latency=1",
-              "--presigned_cert=/Users/pasha/webitel/key.pem",
+              "--grpc_addr=10.10.10.163:50051",
               "server"
         ]
         }

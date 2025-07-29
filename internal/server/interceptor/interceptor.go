@@ -11,7 +11,7 @@ import (
 	"github.com/VoroniakPavlo/call_audit/auth"
 	"go.opentelemetry.io/otel/trace"
 
-	api "github.com/VoroniakPavlo/call_audit/api/protos/storage"
+	api "github.com/VoroniakPavlo/call_audit/api"
 	cerror "github.com/VoroniakPavlo/call_audit/internal/errors"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"

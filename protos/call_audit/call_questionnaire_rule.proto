@@ -4,7 +4,7 @@ package call_audit;
 
 import "google/protobuf/timestamp.proto";
 import "google/protobuf/wrappers.proto";
-import "github.com/VoroniakPavlo/call_audit/protos/call_audit/general.proto";
+import "call_audit/general.proto";
 
 option go_package = "github.com/VoroniakPavlo/call_audit/api/call_audit;call_audit";
 

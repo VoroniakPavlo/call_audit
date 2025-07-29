@@ -6,7 +6,6 @@ import (
 
 	"github.com/VoroniakPavlo/call_audit/auth"
 
-	"github.com/webitel/webitel-go-kit/etag"
 )
 
 type UpdateOptions interface {
@@ -17,7 +16,6 @@ type UpdateOptions interface {
 	GetDerivedSearchOpts() map[string]*SearchOptions
 	RequestTime() time.Time
 	GetMask() []string
-	GetEtags() []*etag.Tid
 	GetParentID() int64
 	GetIDs() []int64
 }

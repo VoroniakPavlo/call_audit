@@ -8,7 +8,6 @@ import (
 
 	conf "github.com/VoroniakPavlo/call_audit/config"
 	"github.com/VoroniakPavlo/call_audit/internal/app"
-	
 )
 
 func Run() {
@@ -47,9 +46,6 @@ func Run() {
 		slog.Info("call_audit.main.application_started_successfully")
 	}
 
-	// test
-
-	
 }
 
 func initSignals(application *app.App) {

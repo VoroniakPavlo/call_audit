@@ -12,7 +12,6 @@ import (
 	util2 "github.com/VoroniakPavlo/call_audit/model/options/grpc/util"
 	"github.com/VoroniakPavlo/call_audit/util"
 
-	"github.com/webitel/webitel-go-kit/etag"
 )
 
 type UpdateOption func(*UpdateOptions) error
@@ -50,13 +49,6 @@ func WithUpdateMasker(m UpdateMasker) UpdateOption {
 	}
 }
 
-// WithUpdateEtag adds an etag to the UpdateOptions
-func WithUpdateEtag(etags ...*etag.Tid) UpdateOption {
-	return func(o *UpdateOptions) error {
-		o.Etags = append(o.Etags, etags...)
-		return nil
-	}
-}
 
 func WithUpdateParentID(parentID int64) UpdateOption {
 	return func(o *UpdateOptions) error {
@@ -79,7 +71,6 @@ type UpdateOptions struct {
 	UnknownFields     []string
 	DerivedSearchOpts map[string]*options.SearchOptions
 	Mask              []string
-	Etags             []*etag.Tid
 	Auth              auth.Auther
 	ParentID          int64
 	IDs               []int64
@@ -105,11 +96,6 @@ func (s *UpdateOptions) SetDerivedSearchOpts(opts map[string]*options.SearchOpti
 	return s
 }
 func (s *UpdateOptions) GetMask() []string     { return s.Mask }
-func (s *UpdateOptions) GetEtags() []*etag.Tid { return s.Etags }
-func (s *UpdateOptions) SetEtags(etags ...*etag.Tid) *UpdateOptions {
-	s.Etags = append(s.Etags, etags...)
-	return s
-}
 func (s *UpdateOptions) RequestTime() time.Time { return s.Time }
 
 func NewUpdateOptions(ctx context.Context, opts ...UpdateOption) (*UpdateOptions, error) {

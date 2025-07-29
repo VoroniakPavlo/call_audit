@@ -7,12 +7,11 @@ type ServiceStore struct {
 }
 
 func (s *ServiceStore) Execute(ctx context.Context, query string, args ...interface{}) (result interface{}, err error) {
-	// Example implementation, replace with actual logic
-	conn, err := s.storage.conn.Acquire(ctx)
-	if err != nil {
-		return nil, err
+	conn, dbErr := s.storage.Database()
+	if dbErr != nil {
+		return nil, dbErr
 	}
-	defer conn.Release()
+
 	result, err = conn.Exec(ctx, query, args...)
 	if err != nil {
 		return nil, err
@@ -21,25 +20,40 @@ func (s *ServiceStore) Execute(ctx context.Context, query string, args ...interf
 }
 
 func (s *ServiceStore) Array(ctx context.Context, query string, args ...interface{}) ([]interface{}, error) {
-	// Example implementation, replace with actual logic
 	conn, err := s.storage.conn.Acquire(ctx)
 	if err != nil {
 		return nil, err
 	}
 	defer conn.Release()
+
 	rows, err := conn.Query(ctx, query, args...)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
+
 	var results []interface{}
+	cols := rows.FieldDescriptions()
+
 	for rows.Next() {
-		var row interface{}
-		if err := rows.Scan(&row); err != nil {
+		values := make([]interface{}, len(cols))
+		valuePtrs := make([]interface{}, len(cols))
+		for i := range values {
+			valuePtrs[i] = &values[i]
+		}
+
+		if err := rows.Scan(valuePtrs...); err != nil {
 			return nil, err
 		}
-		results = append(results, row)
+
+		rowMap := make(map[string]interface{})
+		for i, col := range cols {
+			name := string(col.Name)
+			rowMap[name] = values[i]
+		}
+		results = append(results, rowMap)
 	}
+
 	if err := rows.Err(); err != nil {
 		return nil, err
 	}

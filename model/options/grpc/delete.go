@@ -7,9 +7,6 @@ import (
 
 	"github.com/VoroniakPavlo/call_audit/auth"
 	"github.com/VoroniakPavlo/call_audit/model"
-	"github.com/VoroniakPavlo/call_audit/util"
-
-	"github.com/webitel/webitel-go-kit/etag"
 )
 
 type DeleteOptions struct {
@@ -36,30 +33,9 @@ func WithDeleteID(id int64) DeleteOption {
 	}
 }
 
-func WithDeleteIDsAsEtags(tag etag.EtagType, etags ...string) DeleteOption {
-	return func(options *DeleteOptions) error {
-		ids, err := util.ParseIds(etags, tag)
-		if err != nil {
-			return err
-		}
-		options.IDs = ids
-		return nil
-	}
-}
 func WithDeleteParentID(id int64) DeleteOption {
 	return func(options *DeleteOptions) error {
 		options.IDs = []int64{id}
-		return nil
-	}
-}
-
-func WithDeleteParentIDAsEtag(etagType etag.EtagType, tag string) DeleteOption {
-	return func(options *DeleteOptions) error {
-		id, err := etag.EtagOrId(etagType, tag)
-		if err != nil {
-			return err
-		}
-		options.ParentID = id.GetOid()
 		return nil
 	}
 }

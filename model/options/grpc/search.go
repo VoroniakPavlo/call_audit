@@ -11,8 +11,6 @@ import (
 	"github.com/VoroniakPavlo/call_audit/model/options/defaults"
 	"github.com/VoroniakPavlo/call_audit/model/options/grpc/shared"
 	"github.com/VoroniakPavlo/call_audit/util"
-
-	"github.com/webitel/webitel-go-kit/etag"
 )
 
 type SearchOption func(options *SearchOptions) error
@@ -118,16 +116,6 @@ func WithSort(sorter Sorter) SearchOption {
 	}
 }
 
-func WithIDsAsEtags(tag etag.EtagType, etags ...string) SearchOption {
-	return func(options *SearchOptions) error {
-		ids, err := util.ParseIds(etags, tag)
-		if err != nil {
-			return err
-		}
-		options.IDs = ids
-		return nil
-	}
-}
 
 type SearchOptions struct {
 	createdAt time.Time
