@@ -25,13 +25,13 @@ func NewRunner(cfg *Config) *Runner {
 	return &Runner{cfg: cfg}
 }
 
-func (r *Runner) ProcessUUID(job *model.CallJob) {
+func (r *Runner) ProcessUUID(job *model.CallJob) error {
 	slog.Info("Starting processing UUID", slog.String("uuid", job.Params.CallID))
 
 	transcriptID, fromName, toName := r.fetchTranscriptInfoWithRetries(job.Params.CallID)
 	if transcriptID == "" {
 		slog.Warn("No transcript ID returned", slog.String("uuid", job.Params.CallID))
-		return
+		return fmt.Errorf("no transcript ID found for UUID %s", job.Params.CallID)
 	}
 
 	phrases := r.getPhrases(transcriptID, job.Params.CallID)
@@ -41,16 +41,17 @@ func (r *Runner) ProcessUUID(job *model.CallJob) {
 		scorecard, err := r.fetchScorecardForm(job.Params.Scorecard)
 		if err != nil {
 			slog.Error("Failed to fetch scorecard form", slog.String("scorecard_id", fmt.Sprint(job.Params.Scorecard)), slog.String("error", err.Error()))
-			return
+			return err
 		}
 		prompt := buildScorecardPrompt(dialogue, scorecard, *job.Params.SaveExplanation)
 		scores, comment := r.callOpenAIForScorecard(prompt, job)
 		r.sendScorecardAnswers(job, scores, comment)
-		return
+		return nil
 	}
 
-	summary, category := r.summarizeTranscript(phrases, fromName, toName, job)
+	summary, category := r.summarizeTranscript(dialogue, fromName, toName, job)
 	r.patchSummary(job.Params.CallID, summary, category)
+	return nil
 }
 
 func buildDialogue(phrases []map[string]any, from, to string) string {
@@ -72,11 +73,11 @@ func buildDialogue(phrases []map[string]any, from, to string) string {
 func buildScorecardPrompt(dialogue string, form *model.ScorecardForm, explain bool) string {
 	var b strings.Builder
 
-	b.WriteString("Оцініть наступний дзвінок за анкетою.")
+	b.WriteString("Оціни наступний дзвінок за анкетою.")
 	if explain {
 		b.WriteString(" Для кожної відповіді коротко поясни, чому саме цю оцінку надано.")
 	}
-	b.WriteString(" Повертай тільки результат у форматі JSON.\n\n")
+	b.WriteString(" Повертай результат у форматі JSON.\n\n")
 
 	b.WriteString("Дзвінок:\n")
 	b.WriteString(dialogue)
@@ -84,21 +85,24 @@ func buildScorecardPrompt(dialogue string, form *model.ScorecardForm, explain bo
 
 	for i, q := range form.Questions {
 		b.WriteString(fmt.Sprintf("%d. %s\n", i+1, q.Question))
-		if q.Type == "question_option" {
+		switch q.Type {
+		case "question_option":
 			b.WriteString("Вибери один з точних варіантів:")
 			for _, opt := range q.Options {
 				b.WriteString(fmt.Sprintf(" - %s (%d)\n", opt.Name, opt.Score))
 			}
 			b.WriteString(" — будь-яке інше значення не допускається.")
-		} else if q.Type == "question_score" {
+		case "question_score":
 			b.WriteString(fmt.Sprintf("Оцінка від %d до %d\n", q.Min, q.Max))
 		}
 	}
 
-	b.WriteString("\nФормат відповіді:\n")
 	if explain {
+		b.WriteString("\nТекст пояснення формуй для кожного питання з нового рядка, прономеруй пояснення\n")
+		b.WriteString("\nФормат відповіді:\n")
 		b.WriteString(`{"answers":[{"score":10},...],"comment":"текст пояснення"}`)
 	} else {
+		b.WriteString("\nФормат відповіді:\n")
 		b.WriteString(`{"answers":[{"score":10},...],"comment":"-"}`)
 	}
 	return b.String()
@@ -317,51 +321,38 @@ func (r *Runner) getPhrases(transcriptID, uuid string) []map[string]any {
 	return result.Items
 }
 
-func (r *Runner) summarizeTranscript(phrases []map[string]any, from, to string, job *model.CallJob) (string, string) {
-	var dialogue strings.Builder
-	for _, p := range phrases {
-		phrase, _ := p["phrase"].(string)
-		channel, _ := p["channel"].(float64) // JSON numbers parsed as float64
-		name := fmt.Sprintf("Спікер %d", int(channel))
-		if int(channel) == 0 && from != "" {
-			name = from
-		} else if int(channel) == 1 && to != "" {
-			name = to
-		}
-		dialogue.WriteString(fmt.Sprintf("%s: %s\n", name, phrase))
+func (r *Runner) summarizeTranscript(dialogue, from, to string, job *model.CallJob) (string, string) {
+
+	prompt := ""
+	if job.Params.DefaultPrompt != nil && *job.Params.DefaultPrompt != "" {
+		prompt = fmt.Sprintf("\nОсь розмова:\n%s\n\nВідповідь повертай у форматі:\nSummary: <текст>\nCategory: <одна з %s>",
+			dialogue,
+			strings.Join(r.cfg.OpenAICategories, ", "))
 	}
 
-	prompt := fmt.Sprintf("%s\n\nОсь розмова:\n%s\n\nВідповідь повертай у форматі:\nSummary: <текст>\nCategory: <одна з %s>",
-		r.cfg.OpenAIPrompt,
-		dialogue.String(),
-		strings.Join(r.cfg.OpenAICategories, ", "))
-
-	payload := map[string]any{
-		"model": "gpt-4o",
-		"messages": []map[string]string{
-			{"role": "system", "content": "Ти класифікатор дзвінків та узагальнювач."},
-			{"role": "user", "content": prompt},
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	openaiClient := openai.NewClient(option.WithAPIKey(*job.Params.Token))
+	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
+	defer cancel()
+	// Create the chat completion request
+	chatCompletion, err := openaiClient.Chat.Completions.New(ctx, openai.ChatCompletionNewParams{
+		Model: openai.ChatModelGPT4o,
+		Messages: []openai.ChatCompletionMessageParamUnion{
+			openai.SystemMessage("Ти класифікатор дзвінків та узагальнювач."),
+			openai.UserMessage(prompt),
 		},
-		"temperature": 0.3,
-	}
-
-	jsonBody, _ := json.Marshal(payload)
-	req, _ := http.NewRequest("POST", "https://api.openai.com/v1/chat/completions", bytes.NewReader(jsonBody))
-	req.Header.Set("Content-Type", "application/json")
-	req.Header.Set("Authorization", "Bearer "+*job.Params.Token)
-
-	resp, err := http.DefaultClient.Do(req)
+	})
 	if err != nil {
-		slog.Error("OpenAI request failed", slog.String("uuid", job.Params.CallID), slog.String("error", err.Error()))
+		slog.Error("OpenAI request failed (summary)", slog.String("uuid", job.Params.CallID), slog.String("error", err.Error()))
 		return "", ""
 	}
-	defer resp.Body.Close()
-
-	body, err := io.ReadAll(resp.Body)
-	if err != nil {
-		slog.Error("OpenAI response read error", slog.String("uuid", job.Params.CallID), slog.String("error", err.Error()))
+	// Check if we got a valid response
+	if len(chatCompletion.Choices) == 0 {
+		slog.Error("OpenAI response has no choices", slog.String("uuid", job.Params.CallID))
 		return "", ""
 	}
+
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	var result struct {
 		Choices []struct {
@@ -370,10 +361,10 @@ func (r *Runner) summarizeTranscript(phrases []map[string]any, from, to string, 
 			} `json:"message"`
 		} `json:"choices"`
 	}
-	if err := json.Unmarshal(body, &result); err != nil {
-		slog.Error("OpenAI JSON parse error", slog.String("uuid", job.Params.CallID), slog.String("error", err.Error()))
-		return "", ""
-	}
+	// if err := json.Unmarshal(body, &result); err != nil {
+	// 	slog.Error("OpenAI JSON parse error", slog.String("uuid", job.Params.CallID), slog.String("error", err.Error()))
+	// 	return "", ""
+	// }
 
 	if len(result.Choices) == 0 {
 		return "", ""

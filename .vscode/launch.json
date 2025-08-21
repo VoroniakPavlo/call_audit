@@ -18,7 +18,7 @@
               "--data_source=postgres://opensips:webitel@10.9.8.111:5432/webitel?sslmode=disable&connect_timeout=10",
               "--amqp=amqp://webitel:webitel@10.9.8.111:5672?heartbeat=10",
               "--consul=10.9.8.111:8500",
-              "--grpc_addr=10.10.10.163:50051",
+              "--grpc_addr=10.10.10.87:50051",
               "server"
         ]
         }

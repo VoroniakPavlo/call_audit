@@ -19,11 +19,11 @@ type Store interface {
 
 // LanguageProfileStore defines the methods for managing language profiles.
 type LanguageProfileStore interface {
-	Create(ctx context.Context, profile *_go.LanguageProfile) (*_go.LanguageProfile, error)
-	Get(ctx context.Context, id int64) (*_go.LanguageProfile, error)
-	Update(ctx context.Context, profile *_go.LanguageProfile) (*_go.LanguageProfile, error)
-	Delete(ctx context.Context, id int64) error
-	List(ctx context.Context) ([]*_go.LanguageProfile, error)
+	Create(ctx context.Context, profile *_go.CreateLanguageProfileRequest) (*_go.LanguageProfile, error)
+	Get(ctx context.Context, id int32) (*_go.LanguageProfile, error)
+	Update(ctx context.Context, profile *_go.UpdateLanguageProfileRequest) (*_go.LanguageProfile, error)
+	Delete(ctx context.Context, id int32) error
+	List(ctx context.Context) (*_go.ListLanguageProfilesResponse, error)
 }
 
 // CallQuestionnaireRuleStore defines the methods for managing call questionnaire rules.

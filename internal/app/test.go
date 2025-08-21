@@ -35,13 +35,23 @@ var (
 )
 
 func (t *AppJobTask) Execute() {
-	s := time.Duration(r.Intn(3)+1) * time.Second
-	fmt.Println(t.Job.Params.CallID, "Execute: ", s)
+	fmt.Println(t.Job.Params.CallID, "Execute started")
 	t.App.Process(&t.Job)
-	time.Sleep(s)
-	fmt.Println(t.Job.Params.CallID, "Execute complete: ", s)
+	fmt.Println(t.Job.Params.CallID, "Execute complete")
 
-	// set task state = 3
+	//setJobCompleted(t.App, &t.Job)
+}
+
+func setJobCompleted(app *App, job *model.CallJob) {
+	_, err := app.Store.ServiceStore().Execute(context.Background(), `
+		UPDATE call_audit.jobs
+		SET state = 3, updated_at = NOW()
+		WHERE id = $1
+	`, job.ID)
+	if err != nil {
+		slog.Error("Failed to update job state", slog.String("error", err.Error()))
+		return
+	}
 }
 
 func dropAllJobs(app *App) {
@@ -91,7 +101,8 @@ func createJobs(app *App, rule model.CallQuestionnaireRule) any {
 				'default_prompt', $5::text,
 				'save_explanation', $6::bool,
 				'variable', $7::text,
-				'scorecard', $12::int
+				'scorecard', $12::int,
+				'default_prompt', $13::text
 			)
 		FROM call_center.cc_calls_history h
 		JOIN LATERAL (
@@ -108,7 +119,7 @@ func createJobs(app *App, rule model.CallQuestionnaireRule) any {
 		AND ($10::varchar IS NULL OR h.direction = $10::varchar)
 		ORDER BY h.stored_at
 		LIMIT (100 - $11)
-	`, fieldName) // вставляємо ключ прямо в SQL
+	`, fieldName)
 
 	args := []any{
 		rule.Id,
@@ -123,6 +134,7 @@ func createJobs(app *App, rule model.CallQuestionnaireRule) any {
 		rule.CallDirection,
 		rule.Active,
 		rule.Scorecard,
+		rule.DefaultPrompt,
 	}
 
 	_, err := app.Store.ServiceStore().Execute(context.Background(), query, args...)
@@ -257,6 +269,10 @@ func getRules(app *App, limit int) (*[]model.CallQuestionnaireRule, error) {
 		if !ok {
 			slog.Error("min_call_duration field is not an int32")
 		}
+		defaultPrompt, ok := ruleData["default_promt"].(string)
+		if !ok {
+			slog.Error("default_promt field is not a string")
+		}
 
 		rule := model.CallQuestionnaireRule{
 			Last:                  lastTime,
@@ -272,6 +288,7 @@ func getRules(app *App, limit int) (*[]model.CallQuestionnaireRule, error) {
 			SaveExplanation:       &saveExplanation,
 			Variable:              &variable,
 			MinCallDuration:       &minCallDuration,
+			DefaultPrompt:         &defaultPrompt,
 		}
 		processedRules = append(processedRules, rule)
 	}
@@ -325,7 +342,6 @@ func getJobs(app *App) ([]model.CallJob, error) {
 		if v, ok := row["call_stored_at"].(time.Time); ok {
 			job.CallStoredAt = v
 		}
-		
 
 		// Handle JSONB column `params`
 		var params model.JobParams
@@ -353,32 +369,32 @@ func StartJobs(app *App) {
 
 	//Get rules and create jobs
 	go func() {
-	for {
-		rules, err := getRules(app, 100)
-		if err != nil {
-			slog.Error("Failed to get rules", slog.String("error", err.Error()))
-			time.Sleep(10 * time.Second) // на випадок помилки — все одно чекаємо
-			continue
+		ticker := time.NewTicker(10 * time.Second)
+		defer ticker.Stop()
+
+		for range ticker.C {
+			rules, err := getRules(app, 100)
+			if err != nil {
+				slog.Error("Failed to get rules", slog.String("error", err.Error()))
+				continue
+			}
+
+			for _, rule := range *rules {
+				createJobs(app, rule)
+				slog.Info("Created jobs for rule",
+					slog.Int64("rule_id", int64(rule.Id)),
+					slog.Int64("active", int64(rule.Active)),
+					slog.String("last_stored_at", rule.Last.String()))
+			}
 		}
-
-		for _, rule := range *rules {
-			createJobs(app, rule)
-			slog.Info("Created jobs for rule", 
-				slog.Int64("rule_id", int64(rule.Id)), 
-				slog.Int64("active", int64(rule.Active)), 
-				slog.String("last_stored_at", rule.Last.String()))
-		}
-
-		time.Sleep(10 * time.Second)
-	}
-}()
-
+	}()
 
 	// Start a goroutine to drop finished jobs every second
 	go func() {
-		for {
+		ticker := time.NewTicker(1 * time.Second)
+		defer ticker.Stop()
+		for range ticker.C {
 			dropFinishedJobs(app)
-			time.Sleep(time.Second)
 		}
 	}()
 
@@ -389,12 +405,13 @@ func StartJobs(app *App) {
 	go func() {
 		cfg := processor.LoadConfig()
 		procApp := processor.NewApp(cfg)
+		ticker := time.NewTicker(1 * time.Second)
+		defer ticker.Stop()
 
-		for {
-			jobs, err := getJobs(app) // []model.CallJob
+		for range ticker.C {
+			jobs, err := getJobs(app)
 			if err != nil {
 				slog.Error("Failed to get jobs", slog.String("error", err.Error()))
-				time.Sleep(2 * time.Second)
 				continue
 			}
 
@@ -405,8 +422,6 @@ func StartJobs(app *App) {
 				})
 				slog.Info("Submitted job", slog.String("uuid", job.Params.CallID))
 			}
-
-			time.Sleep(1 * time.Second)
 		}
 	}()
 

@@ -55,32 +55,16 @@ message DeleteLanguageProfileRequest {
 
 // === RESPONSES ===
 
-message GetLanguageProfileResponse {
-  LanguageProfile profile = 1;
-}
-
 message ListLanguageProfilesResponse {
   repeated LanguageProfile profiles = 1;
-}
-
-message CreateLanguageProfileResponse {
-  LanguageProfile profile = 1;
-}
-
-message UpdateLanguageProfileResponse {
-  LanguageProfile profile = 1;
-}
-
-message DeleteLanguageProfileResponse {
-  bool success = 1;
 }
 
 // === SERVICE ===
 
 service LanguageProfileService {
-  rpc Get(GetLanguageProfileRequest) returns (GetLanguageProfileResponse);
+  rpc Get(GetLanguageProfileRequest) returns (LanguageProfile);
   rpc List(ListLanguageProfilesRequest) returns (ListLanguageProfilesResponse);
-  rpc Create(CreateLanguageProfileRequest) returns (CreateLanguageProfileResponse);
-  rpc Update(UpdateLanguageProfileRequest) returns (UpdateLanguageProfileResponse);
-  rpc Delete(DeleteLanguageProfileRequest) returns (DeleteLanguageProfileResponse);
+  rpc Create(CreateLanguageProfileRequest) returns (LanguageProfile);
+  rpc Update(UpdateLanguageProfileRequest) returns (LanguageProfile);
+  rpc Delete(DeleteLanguageProfileRequest) returns (LanguageProfile);
 }

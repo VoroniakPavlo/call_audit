@@ -37,8 +37,11 @@ func (a *App) Process(job *model.CallJob) map[string]any {
 
 	slog.Info("Accepted Call ID", slog.String("call_id", job.Params.CallID))
 	go func() {
-		a.Runner.ProcessUUID(job)
+		if err := a.Runner.ProcessUUID(job); err != nil {
+			slog.Error("Failed to process Call ID", slog.String("call_id", job.Params.CallID), slog.String("error", err.Error()))
+		}
 		a.State.Remove(job.Params.CallID)
+		
 		slog.Info("Finished processing Call ID", slog.String("call_id", job.Params.CallID))
 	}()
 
